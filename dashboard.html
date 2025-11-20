@@ -51,13 +51,12 @@ async function carregarDados() {
     document.getElementById("mensagemTopo").innerHTML =
         `🎉 PARABÉNS! VOCÊ ESTÁ NO NÍVEL <b>${user.Nivel}</b> 🎉`;
 
-    document.getElementById("cards").innerHTML = `
+   document.getElementById("cards").innerHTML = `
     <div class='card'>TSH<br><b>${user.TSH}%</b></div>
     <div class='card'>AR<br><b>${user.AR}%</b></div>
     <div class='card'>CAA<br><b>${user.CAA}%</b></div>
-    <div class='card'>OVERTIME<br><b>${user.Overtime}%</b></div>
     <div class='card'>Corridas<br><b>${user.Corridas}</b></div>
-    `;
+`;
 
     let bloco = "";
     const nivel = user.Nivel.toUpperCase();
