@@ -1,110 +1,101 @@
-/* ================================
-   BASE
-================================ */
+/* BASE */
 body {
     background: #000;
     color: #fff;
     font-family: 'Segoe UI', Arial, sans-serif;
-    text-align: center;
     margin: 0;
     padding: 0;
+    text-align: center;
 }
 
-/* ================================
-   LOGO DE FUNDO – MARCA D'ÁGUA
-================================ */
+/* LOGO DE FUNDO */
 .logo-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
-
-    background-image: url("logo.png"); /* deixa o arquivo na mesma pasta */
-    background-repeat: no-repeat;
+    background-image: url("logo.png");
+    background-size: 1100px;
     background-position: center;
-    background-size: 900px; /* ajuste aqui: 700px / 900px / 1100px */
-
-    opacity: 0.07; /* intensidade da marca d'água */
-    filter: blur(0.6px); /* deixa mais suave */
+    background-repeat: no-repeat;
+    opacity: 0.05;
+    z-index: -1;
 }
 
-/* ================================
-   TÍTULO SUPERIOR
-================================ */
+/* BOTÃO SAIR */
+.btn-sair {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    background: #FF4D4D;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 0 12px rgba(255, 77, 77, 0.7);
+    transition: 0.2s;
+}
+
+.btn-sair:hover {
+    background: #FF6B6B;
+    transform: scale(1.07);
+}
+
+/* TÍTULO SUPERIOR */
 .titulo-superior {
     color: #FFD700;
-    font-size: 42px;
-    margin-top: 35px;
+    font-size: 40px;
+    margin-top: 80px;
     font-weight: 900;
-    text-shadow: 
-        0 0 12px #FFD700,
-        0 0 22px #FFEA00;
+    text-shadow: 0 0 12px #FFD700;
 }
 
-/* ================================
-   BLOCO DO NIVEL
-================================ */
+/* BLOCO DO NIVEL */
 .box-nivel-topo {
     width: 70%;
     margin: 20px auto;
     padding: 30px 20px;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.05);
     border-radius: 20px;
     border: 2px solid #FFD700;
-    box-shadow: 0 0 18px rgba(255,215,0,0.6),
-                inset 0 0 10px rgba(255,215,0,0.1);
 }
 
-/* ================================
-   NÍVEL ATUAL
-================================ */
-#nivelAtual {
-    font-size: 38px;
-    font-weight: 900;
-    color: #FFD700;
-    text-shadow: 0 0 10px #FFC300;
-}
-
-/* ================================
-   NOME DO ENTREGADOR
-================================ */
-#nomeEntregador {
-    font-size: 25px;
-    margin-bottom: 30px;
-}
-
-/* ================================
-   CARDS DE MÉTRICAS
-================================ */
+/* CARDS */
 .card {
     background: rgba(255,255,255,0.06);
     border: 2px solid #FFD700;
     border-radius: 16px;
+    width: 230px;
     padding: 25px;
-    width: 250px;
     display: inline-block;
     margin: 15px;
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 700;
-    color: #fff;
-    box-shadow:
-        0 0 12px rgba(255,215,0,0.4),
-        inset 0 0 10px rgba(255,215,0,0.2);
+    box-shadow: 0 0 12px rgba(255,215,0,0.4);
 }
 
-/* ================================
-   BLOCO DE TEXTO DO NÍVEL
-================================ */
+/* DETALHES COLORIDOS */
+.tsh { color: #FFD700; font-weight: bold; }
+.ar { color: #4FC3F7; font-weight: bold; }
+.caa { color: #FF7A00; font-weight: bold; }
+.overtime { color: #FF4D4D; font-weight: bold; }
+
+.valor {
+    color: #fff;
+    font-weight: bold;
+}
+
+/* BLOCO DE TEXTO */
 .mensagem-bloco {
     margin-top: 40px;
     background: rgba(255,215,0,0.05);
     border: 2px solid rgba(255,215,0,0.3);
     border-left: 6px solid #FFD700;
-    box-shadow: 0 0 12px rgba(255,215,0,0.3),
-                inset 0 0 12px rgba(255,215,0,0.08);
-    border-radius: 18px;
     padding: 35px;
     width: 80%;
     margin-left: auto;
@@ -114,64 +105,6 @@ body {
     line-height: 1.6;
 }
 
-/* ================================
-   TÍTULO DO BLOCO
-================================ */
 .mensagem-bloco h2 {
     color: #FFD700;
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-/* ================================
-   LISTA DE INDICADORES
-================================ */
-ul li {
-    margin-bottom: 10px;
-    font-size: 19px;
-}
-
-/* ================================
-   CORES INDIVIDUAIS
-================================ */
-.tsh {
-    color: #FFD700;
-    font-weight: 900;
-    text-shadow: 0 0 6px #FFD700;
-}
-
-.ar {
-    color: #4FC3F7;
-    font-weight: 900;
-    text-shadow: 0 0 6px #4FC3F7;
-}
-
-.caa {
-    color: #FF7A00;
-    font-weight: 900;
-    text-shadow: 0 0 6px #FF7A00;
-}
-
-.overtime {
-    color: #FF4D4D;
-    font-weight: 900;
-    text-shadow: 0 0 6px #FF4D4D;
-}
-
-/* ================================
-   TEXTO: MAIOR/MENOR OU IGUAL
-================================ */
-.cond {
-    color: #CCCCCC;
-    font-weight: 600;
-    margin: 0 4px;
-}
-
-/* ================================
-   PERCENTUAL
-================================ */
-.valor {
-    color: #FFFFFF;
-    font-weight: 900;
-    text-shadow: 0 0 6px rgba(255,255,255,0.5);
 }
