@@ -8,7 +8,11 @@
 
 <body>
 
+<!-- LOGO DE FUNDO -->
 <div class="logo-bg"></div>
+
+<!-- BOTÃO SAIR -->
+<button class="btn-sair" onclick="sair()">🔓 Sair</button>
 
 <h1 id="mensagemTopo" class="titulo-superior"></h1>
 
@@ -24,11 +28,13 @@
 <div id="mensagemExtras" class="mensagem-bloco"></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwCK_46Is1Fj1rIDdsIclRh7s2TLYZM6gOaPc8U62COmgTNthXBX55z5wz7hkKgnAqEJA/exec";
+const API_URL =
+ "https://script.google.com/macros/s/AKfycbwCK_46Is1Fj1rIDdsIclRh7s2TLYZM6gOaPc8U62COmgTNthXBX55z5wz7hkKgnAqEJA/exec";
 
 async function carregarDados() {
-
     const cpf = localStorage.getItem("cpf");
+
+    if (!cpf) window.location.href = "index.html";
 
     const response = await fetch(`${API_URL}?cpf=${cpf}`);
     const user = await response.json();
@@ -54,10 +60,8 @@ async function carregarDados() {
 
     let bloco = "";
 
-    // ===========================================
-    // SUPERFOX — TEXTO OFICIAL COMPLETO
-    // ===========================================
     if (user.Nivel.toUpperCase() === "SUPERFOX") {
+
         bloco = `
         <h2>RANKING – SUPERFOX</h2>
 
@@ -66,16 +70,16 @@ async function carregarDados() {
         <p><b>Parabéns por ter alcançado o nível SUPER FOX, continue com os pontos chaves:</b></p>
 
         <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
+            <li><span class="tsh">TSH</span> acima de <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> = <span class="valor">1%</span></li>
         </ul>
 
         <p><b>SEGUNDA, QUARTA E SEXTA SUA AGENDA ABRE A PARTIR DAS 8H40</b></p>
 
-        <p>Você está muito BEM! Continue firme! 🦊🔥<br>
-        mantenha-se assim e garanta promoções exclusivas, vantagens no agendamento e Brindes exclusivos por ser um SuperFox.</p>
+        <p>Você está muito BEM! Continue firme! 🦊🔥</p>
+        <p>Garanta promoções exclusivas e vantagens no agendamento!</p>
 
         <p class="aviso">
         ⚠️ LEMBRANDO QUE<br>
@@ -86,130 +90,27 @@ async function carregarDados() {
         `;
     }
 
-    // ===========================================
-    // OURO — TEXTO OFICIAL COMPLETO
-    // ===========================================
-    if (user.Nivel.toUpperCase() === "OURO") {
-        bloco = `
-        <h2>Ranking – Ouro</h2>
-
-        <p>Parabéns você está no Nível Ouro</p>
-
-        <p><b>Parabéns por ter alcançado o nível OURO, AGORA SUA AGENDA É:<br>
-        SEGUNDA, QUARTA E SEXTA ELA IRÁ ABRIR A PARTIR DAS 8H45</b></p>
-
-        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
-
-        <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
-        </ul>
-
-        <p>Ao alcançar o nível SuperFox você pode garantir promoções exclusivas e Brindes exclusivos e ter prioridade no agendamento por ser um SuperFox.</p>
-
-        <p class="aviso">⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.</p>
-        `;
-    }
-
-    // ===========================================
-    // PRATA — TEXTO OFICIAL COMPLETO
-    // ===========================================
-    if (user.Nivel.toUpperCase() === "PRATA") {
-        bloco = `
-        <h2>Ranking – Prata</h2>
-
-        <p>Parabéns você está no Nível Prata</p>
-
-        <p><b>AGORA SUA AGENDA É:<br>
-        SEGUNDA, QUARTA E SEXTA ELA IRÁ ABRIR A PARTIR DAS 8H50</b></p>
-
-        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
-
-        <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
-        </ul>
-
-        <p>Ao alcançar o nível SuperFox você pode garantir promoções exclusivas e Brindes exclusivos e ter prioridade no agendamento.</p>
-
-        <p class="aviso">⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.</p>
-        `;
-    }
-
-    // ===========================================
-    // BRONZE — TEXTO OFICIAL COMPLETO
-    // ===========================================
-    if (user.Nivel.toUpperCase() === "BRONZE") {
-        bloco = `
-        <h2>Ranking – Bronze</h2>
-
-        <p>Parabéns você está no Nível Bronze</p>
-
-        <p><b>AGORA SUA AGENDA É:<br>
-        SEGUNDA, QUARTA E SEXTA ELA IRÁ ABRIR A PARTIR DAS 8H55</b></p>
-
-        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
-
-        <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
-        </ul>
-
-        <p>Ao alcançar o nível SuperFox você pode garantir promoções exclusivas e Brindes exclusivos e ter prioridade no agendamento.</p>
-
-        <p class="aviso">⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.</p>
-        `;
-    }
-
-    // ===========================================
-    // SEM NÍVEL — TEXTO OFICIAL COMPLETO
-    // ===========================================
-    if (user.Nivel.toUpperCase() === "SEM NIVEL") {
-        bloco = `
-        <h2>Ranking – Não classificado</h2>
-
-        <p>Ah, não foi dessa vez... você não foi ranqueado.</p>
-
-        <p><b>SUA AGENDA:<br>
-        SEGUNDA, QUARTA E SEXTA ELA IRÁ ABRIR A PARTIR DAS 09h00</b></p>
-
-        <p><b>Melhore os pontos chaves e tenha um Nível garantido.</b></p>
-
-        <p><b>Conclua 50 rotas:</b></p>
-
-        <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
-        </ul>
-
-        <p>E alcance VANTAGENS EXCLUSIVAS.</p>
-
-        <p class="aviso">⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.</p>
-        `;
-    }
-
     document.getElementById("mensagemExtras").innerHTML = bloco;
 }
+
+/* Função SAIR */
+function sair() {
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
+/* AUTO LOGOUT 10 MINUTOS */
+let tempoLimite = 10 * 60 * 1000;
+let timer = setTimeout(sair, tempoLimite);
+
+function resetTimer() {
+    clearTimeout(timer);
+    timer = setTimeout(sair, tempoLimite);
+}
+
+window.addEventListener("mousemove", resetTimer);
+window.addEventListener("keydown", resetTimer);
+window.addEventListener("click", resetTimer);
 
 carregarDados();
 </script>
