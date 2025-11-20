@@ -51,12 +51,16 @@ async function carregarDados() {
     document.getElementById("mensagemTopo").innerHTML =
         `🎉 PARABÉNS! VOCÊ ESTÁ NO NÍVEL <b>${user.Nivel}</b> 🎉`;
 
-   document.getElementById("cards").innerHTML = `
-    <div class='card'>TSH<br><b>${user.TSH}%</b></div>
-    <div class='card'>AR<br><b>${user.AR}%</b></div>
-    <div class='card'>CAA<br><b>${user.CAA}%</b></div>
-    <div class='card'>Corridas<br><b>${user.Corridas}</b></div>
-`;
+    /* ================================
+       CARDS CORRIGIDOS COM OVERTIME
+    ================================= */
+    document.getElementById("cards").innerHTML = `
+        <div class='card'>TSH<br><b>${user.TSH}%</b></div>
+        <div class='card'>AR<br><b>${user.AR}%</b></div>
+        <div class='card'>CAA<br><b>${user.CAA}%</b></div>
+        <div class='card'>OVERTIME<br><b>${user.OVERTIME}%</b></div>
+        <div class='card'>Corridas Concluídas<br><b>${user.Corridas}</b></div>
+    `;
 
     let bloco = "";
     const nivel = user.Nivel.toUpperCase();
@@ -73,13 +77,10 @@ async function carregarDados() {
         <p><b>Parabéns por ter alcançado o nível SUPER FOX, continue com os pontos chaves:</b></p>
 
         <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
+            <li><span class="tsh">TSH</span> acima de <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> = <span class="valor">1%</span></li>
         </ul>
 
         <p><b>SEGUNDA, QUARTA E SEXTA SUA AGENDA ABRE A PARTIR DAS 8H40</b></p>
@@ -111,10 +112,10 @@ async function carregarDados() {
         <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox:</b></p>
 
         <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
+            <li><span class="tsh">TSH</span> acima de <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> = <span class="valor">1%</span></li>
         </ul>
 
         <p>Ao alcançar o nível SuperFox você garante promoções exclusivas e prioridade no agendamento.</p>
@@ -142,10 +143,10 @@ async function carregarDados() {
         <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox:</b></p>
 
         <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
+            <li><span class="tsh">TSH</span> acima de <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> = <span class="valor">1%</span></li>
         </ul>
 
         <p>Busque evoluir para SuperFox e tenha benefícios exclusivos!</p>
@@ -173,10 +174,10 @@ Você é prestador de serviço e tem autonomia total.
         <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox:</b></p>
 
         <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
+            <li><span class="tsh">TSH</span> acima de <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> = <span class="valor">1%</span></li>
         </ul>
 
         <p>Melhore seus indicadores e suba para níveis maiores!</p>
@@ -204,10 +205,10 @@ Você é prestador de serviço e tem autonomia total.
         <p><b>Conclua 50 rotas e alcance os pontos chaves:</b></p>
 
         <ul>
-            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
+            <li><span class="tsh">TSH</span> acima de <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> = <span class="valor">1%</span></li>
         </ul>
 
         <p>Alcance vantagens exclusivas subindo de nível!</p>
