@@ -8,7 +8,7 @@
 
 <body>
 
-<!-- LOGO DE FUNDO -->
+<!-- FUNDO -->
 <div class="logo-bg"></div>
 
 <!-- BOTÃO SAIR -->
@@ -33,7 +33,6 @@ const API_URL =
 
 async function carregarDados() {
     const cpf = localStorage.getItem("cpf");
-
     if (!cpf) window.location.href = "index.html";
 
     const response = await fetch(`${API_URL}?cpf=${cpf}`);
@@ -44,7 +43,8 @@ async function carregarDados() {
         return;
     }
 
-    document.getElementById("nomeEntregador").innerText = "👋 Olá, " + user.Nome;
+    document.getElementById("nomeEntregador").innerText =
+        "👋 Olá, " + user.Nome;
 
     document.getElementById("nivelAtual").innerText = user.Nivel;
 
@@ -61,9 +61,9 @@ async function carregarDados() {
     let bloco = "";
     const nivel = user.Nivel.toUpperCase();
 
-    /* ==================================================
+    /* ================================
        SUPERFOX
-    ==================================================*/
+    ================================= */
     if (nivel === "SUPERFOX") {
         bloco = `
         <h2>RANKING – SUPERFOX</h2>
@@ -73,10 +73,13 @@ async function carregarDados() {
         <p><b>Parabéns por ter alcançado o nível SUPER FOX, continue com os pontos chaves:</b></p>
 
         <ul>
-            <li>TSH acima de 95%</li>
-            <li>AR MAIOR OU IGUAL A 95%</li>
-            <li>CAA MENOR OU IGUAL A 1%</li>
-            <li>OVERTIME = 1%</li>
+            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
+
+            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
+
+            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
+
+            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
         </ul>
 
         <p><b>SEGUNDA, QUARTA E SEXTA SUA AGENDA ABRE A PARTIR DAS 8H40</b></p>
@@ -89,129 +92,139 @@ async function carregarDados() {
         Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
         Não é cobrança — são orientações para melhorar seu desempenho.<br>
         Você é prestador de serviço e tem autonomia total.
-        </p>`;
+        </p>
+        `;
     }
 
-    /* ==================================================
+    /* ================================
        OURO
-    ==================================================*/
+    ================================= */
     if (nivel === "OURO") {
         bloco = `
         <h2>RANKING – OURO</h2>
 
-        <p>Parabéns você está no Nível Ouro</p>
+        <p>Parabéns você está no Nível Ouro!</p>
 
-        <p><b>SUA AGENDA ABRE: SEGUNDA, QUARTA E SEXTA ÀS 8H45</b></p>
+        <p><b>Parabéns por ter alcançado o nível OURO, AGORA SUA AGENDA É:<br>
+        SEGUNDA, QUARTA E SEXTA ELA IRÁ ABRIR A PARTIR DAS 8H45</b></p>
 
-        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
+        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox:</b></p>
 
         <ul>
-            <li>TSH acima de 95%</li>
-            <li>AR MAIOR OU IGUAL A 95%</li>
-            <li>CAA MENOR OU IGUAL A 1%</li>
-            <li>OVERTIME = 1%</li>
+            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
         </ul>
 
-        <p>Ao alcançar o nível SuperFox você terá promoções especiais e prioridade no agendamento.</p>
+        <p>Ao alcançar o nível SuperFox você garante promoções exclusivas e prioridade no agendamento.</p>
 
-        <p class="aviso">⚠️ LEMBRANDO QUE<br>
+        <p class="aviso">
+        ⚠️ LEMBRANDO QUE<br>
         Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
         Você é prestador de serviço e tem autonomia total.
-        </p>`;
+        </p>
+        `;
     }
 
-    /* ==================================================
+    /* ================================
        PRATA
-    ==================================================*/
+    ================================= */
     if (nivel === "PRATA") {
         bloco = `
         <h2>RANKING – PRATA</h2>
 
-        <p>Parabéns você está no Nível Prata</p>
+        <p>Parabéns você está no Nível Prata!</p>
 
-        <p><b>SUA AGENDA ABRE: SEGUNDA, QUARTA E SEXTA ÀS 8H50</b></p>
+        <p><b>AGORA SUA AGENDA É:<br>
+        SEGUNDA, QUARTA E SEXTA ELA IRÁ ABRIR A PARTIR DAS 8H50</b></p>
 
-        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
+        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox:</b></p>
 
         <ul>
-            <li>TSH acima de 95%</li>
-            <li>AR MAIOR OU IGUAL A 95%</li>
-            <li>CAA MENOR OU IGUAL A 1%</li>
-            <li>OVERTIME = 1%</li>
+            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
         </ul>
 
-        <p>Você está indo muito bem! Continue evoluindo.</p>
+        <p>Busque evoluir para SuperFox e tenha benefícios exclusivos!</p>
 
-        <p class="aviso">⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>`;
+        <p class="aviso">
+       ⚠️ LEMBRANDO QUE<br>
+Essa avaliação serve apenas para manter sua prioridade na agenda.
+Não é cobrança — são orientações para melhorar seu desempenho.
+Você é prestador de serviço e tem autonomia total.
+        </p>
+        `;
     }
 
-    /* ==================================================
+    /* ================================
        BRONZE
-    ==================================================*/
+    ================================= */
     if (nivel === "BRONZE") {
         bloco = `
         <h2>RANKING – BRONZE</h2>
 
-        <p>Parabéns você está no Nível Bronze</p>
+        <p>Parabéns você está no Nível Bronze!</p>
 
-        <p><b>SUA AGENDA ABRE: SEGUNDA, QUARTA E SEXTA ÀS 8H55</b></p>
+        <p><b>SUA AGENDA ABRE A PARTIR DAS 8H55</b></p>
 
-        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
+        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox:</b></p>
 
         <ul>
-            <li>TSH acima de 95%</li>
-            <li>AR MAIOR OU IGUAL A 95%</li>
-            <li>CAA MENOR OU IGUAL A 1%</li>
-            <li>OVERTIME = 1%</li>
+            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
         </ul>
 
-        <p>Continue firme, você está perto de avançar!</p>
+        <p>Melhore seus indicadores e suba para níveis maiores!</p>
 
-        <p class="aviso">⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>`;
+        <p class="aviso">
+        ⚠️ LEMBRANDO QUE<br>
+Essa avaliação serve apenas para manter sua prioridade na agenda.
+Não é cobrança — são orientações para melhorar seu desempenho.
+Você é prestador de serviço e tem autonomia total.
+        </p>
+        `;
     }
 
-    /* ==================================================
-       SEM NÍVEL
-    ==================================================*/
-    if (nivel === "SEM NIVEL" || nivel === "SEM NÍVEL") {
+    /* ================================
+       SEM NIVEL
+    ================================= */
+    if (nivel === "SEM NIVEL") {
         bloco = `
         <h2>RANKING – NÃO CLASSIFICADO</h2>
 
         <p>Ah, não foi dessa vez... você não foi ranqueado.</p>
 
-        <p><b>SUA AGENDA ABRE: SEGUNDA, QUARTA E SEXTA ÀS 09H00</b></p>
+        <p><b>SUA AGENDA ABRE A PARTIR DAS 09H00</b></p>
 
-        <p><b>Para subir de nível conclua 50 rotas e atinja:</b></p>
+        <p><b>Conclua 50 rotas e alcance os pontos chaves:</b></p>
 
         <ul>
-            <li>TSH acima de 95%</li>
-            <li>AR MAIOR OU IGUAL A 95%</li>
-            <li>CAA MENOR OU IGUAL A 1%</li>
-            <li>OVERTIME = 1%</li>
+            <li><span class="tsh">TSH</span> <span class="cond">acima de</span> <span class="valor">95%</span></li>
+            <li><span class="ar">AR</span> <span class="cond">MAIOR OU IGUAL A</span> <span class="valor">95%</span></li>
+            <li><span class="caa">CAA</span> <span class="cond">MENOR OU IGUAL A</span> <span class="valor">1%</span></li>
+            <li><span class="overtime">OVERTIME</span> <span class="cond">=</span> <span class="valor">1%</span></li>
         </ul>
 
-        <p>Ao melhorar esses pontos você poderá subir de nível e ganhar vantagens exclusivas.</p>
+        <p>Alcance vantagens exclusivas subindo de nível!</p>
 
-        <p class="aviso">⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>`;
+        <p class="aviso">
+        ⚠️ LEMBRANDO QUE<br>
+Essa avaliação serve apenas para manter sua prioridade na agenda.
+Não é cobrança — são orientações para melhorar seu desempenho.
+Você é prestador de serviço e tem autonomia total.
+        </p>
+        `;
     }
 
     document.getElementById("mensagemExtras").innerHTML = bloco;
 }
 
-/* Função SAIR */
+/* SAIR */
 function sair() {
     localStorage.clear();
     window.location.href = "index.html";
