@@ -59,9 +59,12 @@ async function carregarDados() {
     `;
 
     let bloco = "";
+    const nivel = user.Nivel.toUpperCase();
 
-    if (user.Nivel.toUpperCase() === "SUPERFOX") {
-
+    /* ==================================================
+       SUPERFOX
+    ==================================================*/
+    if (nivel === "SUPERFOX") {
         bloco = `
         <h2>RANKING – SUPERFOX</h2>
 
@@ -70,24 +73,139 @@ async function carregarDados() {
         <p><b>Parabéns por ter alcançado o nível SUPER FOX, continue com os pontos chaves:</b></p>
 
         <ul>
-            <li><span class="tsh">TSH</span> acima de <span class="valor">95%</span></li>
-            <li><span class="ar">AR</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
-            <li><span class="caa">CAA</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME</span> = <span class="valor">1%</span></li>
+            <li>TSH acima de 95%</li>
+            <li>AR MAIOR OU IGUAL A 95%</li>
+            <li>CAA MENOR OU IGUAL A 1%</li>
+            <li>OVERTIME = 1%</li>
         </ul>
 
         <p><b>SEGUNDA, QUARTA E SEXTA SUA AGENDA ABRE A PARTIR DAS 8H40</b></p>
 
         <p>Você está muito BEM! Continue firme! 🦊🔥</p>
-        <p>Garanta promoções exclusivas e vantagens no agendamento!</p>
+        <p>Mantenha-se assim e garanta promoções exclusivas e vantagens no agendamento.</p>
 
         <p class="aviso">
         ⚠️ LEMBRANDO QUE<br>
         Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
         Não é cobrança — são orientações para melhorar seu desempenho.<br>
         Você é prestador de serviço e tem autonomia total.
-        </p>
-        `;
+        </p>`;
+    }
+
+    /* ==================================================
+       OURO
+    ==================================================*/
+    if (nivel === "OURO") {
+        bloco = `
+        <h2>RANKING – OURO</h2>
+
+        <p>Parabéns você está no Nível Ouro</p>
+
+        <p><b>SUA AGENDA ABRE: SEGUNDA, QUARTA E SEXTA ÀS 8H45</b></p>
+
+        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
+
+        <ul>
+            <li>TSH acima de 95%</li>
+            <li>AR MAIOR OU IGUAL A 95%</li>
+            <li>CAA MENOR OU IGUAL A 1%</li>
+            <li>OVERTIME = 1%</li>
+        </ul>
+
+        <p>Ao alcançar o nível SuperFox você terá promoções especiais e prioridade no agendamento.</p>
+
+        <p class="aviso">⚠️ LEMBRANDO QUE<br>
+        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
+        Não é cobrança — são orientações para melhorar seu desempenho.<br>
+        Você é prestador de serviço e tem autonomia total.
+        </p>`;
+    }
+
+    /* ==================================================
+       PRATA
+    ==================================================*/
+    if (nivel === "PRATA") {
+        bloco = `
+        <h2>RANKING – PRATA</h2>
+
+        <p>Parabéns você está no Nível Prata</p>
+
+        <p><b>SUA AGENDA ABRE: SEGUNDA, QUARTA E SEXTA ÀS 8H50</b></p>
+
+        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
+
+        <ul>
+            <li>TSH acima de 95%</li>
+            <li>AR MAIOR OU IGUAL A 95%</li>
+            <li>CAA MENOR OU IGUAL A 1%</li>
+            <li>OVERTIME = 1%</li>
+        </ul>
+
+        <p>Você está indo muito bem! Continue evoluindo.</p>
+
+        <p class="aviso">⚠️ LEMBRANDO QUE<br>
+        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
+        Não é cobrança — são orientações para melhorar seu desempenho.<br>
+        Você é prestador de serviço e tem autonomia total.
+        </p>`;
+    }
+
+    /* ==================================================
+       BRONZE
+    ==================================================*/
+    if (nivel === "BRONZE") {
+        bloco = `
+        <h2>RANKING – BRONZE</h2>
+
+        <p>Parabéns você está no Nível Bronze</p>
+
+        <p><b>SUA AGENDA ABRE: SEGUNDA, QUARTA E SEXTA ÀS 8H55</b></p>
+
+        <p><b>ALCANCE os pontos chaves e torne-se Nível SuperFox</b></p>
+
+        <ul>
+            <li>TSH acima de 95%</li>
+            <li>AR MAIOR OU IGUAL A 95%</li>
+            <li>CAA MENOR OU IGUAL A 1%</li>
+            <li>OVERTIME = 1%</li>
+        </ul>
+
+        <p>Continue firme, você está perto de avançar!</p>
+
+        <p class="aviso">⚠️ LEMBRANDO QUE<br>
+        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
+        Não é cobrança — são orientações para melhorar seu desempenho.<br>
+        Você é prestador de serviço e tem autonomia total.
+        </p>`;
+    }
+
+    /* ==================================================
+       SEM NÍVEL
+    ==================================================*/
+    if (nivel === "SEM NIVEL" || nivel === "SEM NÍVEL") {
+        bloco = `
+        <h2>RANKING – NÃO CLASSIFICADO</h2>
+
+        <p>Ah, não foi dessa vez... você não foi ranqueado.</p>
+
+        <p><b>SUA AGENDA ABRE: SEGUNDA, QUARTA E SEXTA ÀS 09H00</b></p>
+
+        <p><b>Para subir de nível conclua 50 rotas e atinja:</b></p>
+
+        <ul>
+            <li>TSH acima de 95%</li>
+            <li>AR MAIOR OU IGUAL A 95%</li>
+            <li>CAA MENOR OU IGUAL A 1%</li>
+            <li>OVERTIME = 1%</li>
+        </ul>
+
+        <p>Ao melhorar esses pontos você poderá subir de nível e ganhar vantagens exclusivas.</p>
+
+        <p class="aviso">⚠️ LEMBRANDO QUE<br>
+        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
+        Não é cobrança — são orientações para melhorar seu desempenho.<br>
+        Você é prestador de serviço e tem autonomia total.
+        </p>`;
     }
 
     document.getElementById("mensagemExtras").innerHTML = bloco;
