@@ -52,10 +52,11 @@ async function carregarDados() {
         `🎉 PARABÉNS! VOCÊ ESTÁ NO NÍVEL <b>${user.Nivel}</b> 🎉`;
 
     document.getElementById("cards").innerHTML = `
-        <div class='card'>TSH<br><b>${user.TSH}%</b></div>
-        <div class='card'>AR<br><b>${user.AR}%</b></div>
-        <div class='card'>CAA<br><b>${user.CAA}%</b></div>
-        <div class='card'>Corridas<br><b>${user.Corridas}</b></div>
+    <div class='card'>TSH<br><b>${user.TSH}%</b></div>
+    <div class='card'>AR<br><b>${user.AR}%</b></div>
+    <div class='card'>CAA<br><b>${user.CAA}%</b></div>
+    <div class='card'>OVERTIME<br><b>${user.Overtime}%</b></div>
+    <div class='card'>Corridas Concluídas<br><b>${user.Corridas}</b></div>
     `;
 
     let bloco = "";
