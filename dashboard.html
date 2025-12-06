@@ -67,10 +67,14 @@
     <video id="introVideo" playsinline autoplay muted style="
         width: 80vw;
         height: 80vh;
-        object-fit: cover;
+        max-width: 80%;
+        max-height: 80%;
+        object-fit: contain; /* agora não corta */
         border-radius: 18px;
         box-shadow: 0 0 25px rgba(255,120,0,0.5);
-    ">
+        background: black; /* evita faixas brancas */
+">
+
         <source src="videos/intro.mp4" type="video/mp4">
     </video>
 
