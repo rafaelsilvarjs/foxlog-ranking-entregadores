@@ -9,13 +9,12 @@
 <body>
 
 <!-- ========================================= -->
-<!--     VÍDEO DE INTRODUÇÃO + CONTROLES       -->
+<!--  VÍDEO DE INTRODUÇÃO (AGORA MENOR NA TELA) -->
 <!-- ========================================= -->
 <div id="introVideoContainer" style="
     position: fixed;
     top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.85);
     display: none;
     justify-content: center;
@@ -30,46 +29,41 @@
         position: absolute;
         top: 20px;
         right: 20px;
-        padding: 16px 32px;
-        font-size: 20px;
-        font-weight: 700;
+        padding: 14px 26px;
+        font-size: 18px;
+        font-weight: 600;
         color: #ffffff;
         background: linear-gradient(135deg, #ff8800, #ff4d00);
-        border: 2px solid rgba(255,255,255,0.8);
-        border-radius: 14px;
+        border: 2px solid rgba(255,255,255,0.7);
+        border-radius: 10px;
         cursor: pointer;
         z-index: 10000;
-        box-shadow: 0 0 18px rgba(255,120,0,0.9);
-        transition: .25s;
-    "
-    onmouseover="this.style.transform='scale(1.08)'"
-    onmouseout="this.style.transform='scale(1)'">
+        box-shadow: 0 0 12px rgba(255,120,0,0.7);
+    ">
         ⏭️ Pular
     </button>
 
-    <!-- BOTÃO HABILITAR SOM -->
-    <button id="soundBtn" style="
+    <!-- BOTÃO ATIVAR SOM -->
+    <button id="ativarSomBtn" style="
         position: absolute;
-        bottom: 35px;
+        bottom: 30px;
         right: 20px;
-        padding: 18px 34px;
-        font-size: 20px;
-        font-weight: 800;
+        padding: 14px 26px;
+        font-size: 18px;
+        font-weight: 600;
         color: #ffffff;
-        background: linear-gradient(135deg, #ff8800, #ff4d00);
-        border: 2px solid rgba(255,255,255,0.8);
-        border-radius: 14px;
+        background: linear-gradient(135deg, #ffaa00, #ff6600);
+        border: 2px solid rgba(255,255,255,0.7);
+        border-radius: 10px;
         cursor: pointer;
         z-index: 10000;
-        box-shadow: 0 0 20px rgba(255,120,0,0.9);
-        transition: .25s;
-    "
-    onmouseover="this.style.transform='scale(1.08)'"
-    onmouseout="this.style.transform='scale(1)'">
+        display: none;
+        box-shadow: 0 0 12px rgba(255,120,0,0.7);
+    ">
         🔊 Ativar Som
     </button>
 
-    <!-- VÍDEO -->
+    <!-- 🎥 VÍDEO AGORA NO TAMANHO 80% DA TELA -->
     <video id="introVideo" playsinline autoplay muted style="
         width: 80vw;
         height: 80vh;
@@ -105,54 +99,67 @@
 
 <script>
 /* =================================================== */
-/*          CONTROLE DO VÍDEO — INTRO + SOM            */
+/*        CONTROLE DO VÍDEO — PULAR INTRO             */
 /* =================================================== */
 
 const introContainer = document.getElementById("introVideoContainer");
 const video = document.getElementById("introVideo");
 const skipBtn = document.getElementById("skipIntroBtn");
-const soundBtn = document.getElementById("soundBtn");
+const ativarSomBtn = document.getElementById("ativarSomBtn");
 
-/* Mostrar o vídeo quando carregar */
+/* Mostrar o vídeo quando carregado */
 video.addEventListener("loadeddata", () => {
     introContainer.style.display = "flex";
     video.play().catch(()=>{});
 });
 
-/* Botão de ativar som */
-soundBtn.addEventListener("click", () => {
+/* Botão Pular */
+skipBtn.addEventListener("click", () => {
     video.muted = false;
     video.volume = 1;
     video.play();
-    soundBtn.style.display = "none";
-});
-
-/* Botão Pular */
-skipBtn.addEventListener("click", () => {
     removerIntro();
 });
 
-/* Fade-out e remoção */
+/* Botão Ativar Som */
+ativarSomBtn.addEventListener("click", () => {
+    video.muted = false;
+    video.volume = 1;
+    video.play().catch(()=>{});
+    ativarSomBtn.style.display = "none";
+});
+
+/* Quando o vídeo termina, remove */
+video.addEventListener("ended", removerIntro);
+
+/* Fade-out */
 function removerIntro() {
     introContainer.style.opacity = "0";
     setTimeout(() => introContainer.remove(), 800);
 }
 
-/* Quando o vídeo termina */
-video.addEventListener("ended", removerIntro);
+/* =================================================== */
+/* 🔊 SOM AUTOMÁTICO SEM TOQUE (CELULAR E PC)         */
+/* =================================================== */
 
-/* Celular → libera som no primeiro toque */
-document.addEventListener("touchstart", () => {
+function tentarLiberarSom() {
     video.muted = false;
     video.volume = 1;
-    video.play().catch(()=>{});
-}, { once: true });
 
-document.addEventListener("click", () => {
-    video.muted = false;
-    video.volume = 1;
-    video.play().catch(()=>{});
-}, { once: true });
+    video.play().then(() => {
+        ativarSomBtn.style.display = "none";
+    }).catch(() => {
+        ativarSomBtn.style.display = "block";
+    });
+}
+
+// Assim que o vídeo carregar, tenta ativar som sozinho
+video.addEventListener("loadeddata", () => {
+    setTimeout(tentarLiberarSom, 300);
+});
+
+// Mostra botão caso navegador bloqueie som
+ativarSomBtn.style.display = "block";
 
 
 /* =================================================== */
@@ -192,15 +199,11 @@ async function carregarDados() {
 
     if (nivel === "SUPERFOX") {
         bloco = `
-            <h2>AGENDA – SUPERFOX   - Abertura da agenda: 09h00</h2> <!-- ALTERADO -->
-
-       
+            <h2>AGENDA – SUPERFOX   - Abertura da agenda: 09h00</h2>
 
         <p><b>Parabéns por ter alcançado o SuperFOX, continue com os pontos chaves:</b></p>
-        
-        
+
         <ul>
-       
             <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
             <li><span class="caa">CAA (cancelamemto apos aceite) =</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
             <li><span class="overtime">OVERTIME (atraso na entrega) =</span> <span class="valor">1%</span></li>
@@ -215,28 +218,23 @@ async function carregarDados() {
 
         <p>Nós Verificamos também:✴️Compromisso com as agendas;
            ✴️Média de produtividade</p>
-        <p>Continue firme! 🦊🔥</p>`
-        ; 
+        <p>Continue firme! 🦊🔥</p>`;
     }
 
     if (nivel === "OURO") {
         bloco = `
-         <h2>AGENDA – OURO - Abertura da agenda: 09h10</h2> <!-- ALTERADO -->
+         <h2>AGENDA – OURO - Abertura da agenda: 09h10</h2>
 
-       
-          
         <p>Busque evoluir para SuperFox e tenha benefícios exclusivos!</p>
 
         <ul>
-          
-            <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A  <span class="valor">95%</span></li>
+            <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
             <li><span class="caa">CAA (cancelamemto apos aceite) =</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
             <li><span class="overtime">OVERTIME (atraso na entrega) =</span> <span class="valor">1%</span></li>
         </ul>
 
        <p>Nós verificamos também:✴️Compromisso com as agendas;
            ✴️Média de produtividade</p> 
-        </ul>
 
          <p class="aviso">
         ⚠️ LEMBRANDO QUE<br>
@@ -245,9 +243,10 @@ async function carregarDados() {
         </p>
         `;
     }
+
     if (nivel === "AGENDABASE") {
-    bloco = `
-        <h2>AGENDA – AGENDA BASE - Abertura da agenda: 09h20</h2> 
+        bloco = `
+        <h2>AGENDA – AGENDA BASE - Abertura da agenda: 09h20</h2>
 
         <p>Busque evoluir para SuperFox e tenha benefícios exclusivos!</p>
 
@@ -265,13 +264,11 @@ async function carregarDados() {
         </p>
 
         <p>Nós Verificamos também: ✴️ Compromisso com as agendas; ✴️ Média de produtividade</p>
-        <p>Continue firme! 🦊🔥</p>
-    `;
-}
+        <p>Continue firme! 🦊🔥</p>`;
+    }
 
     document.getElementById("mensagemExtras").innerHTML = bloco;
 }
-
 
 /* LOGOUT */
 function sair() {
