@@ -9,12 +9,13 @@
 <body>
 
 <!-- ========================================= -->
-<!--  VÍDEO DE INTRODUÇÃO (AGORA MENOR NA TELA) -->
+<!--     VÍDEO DE INTRODUÇÃO + CONTROLES       -->
 <!-- ========================================= -->
 <div id="introVideoContainer" style="
     position: fixed;
     top: 0; left: 0;
-    width: 100vw; height: 100vh;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0,0,0,0.85);
     display: none;
     justify-content: center;
@@ -29,26 +30,50 @@
         position: absolute;
         top: 20px;
         right: 20px;
-        padding: 14px 26px;
-        font-size: 18px;
-        font-weight: 600;
+        padding: 16px 32px;
+        font-size: 20px;
+        font-weight: 700;
         color: #ffffff;
         background: linear-gradient(135deg, #ff8800, #ff4d00);
-        border: 2px solid rgba(255,255,255,0.7);
-        border-radius: 10px;
+        border: 2px solid rgba(255,255,255,0.8);
+        border-radius: 14px;
         cursor: pointer;
         z-index: 10000;
-        box-shadow: 0 0 12px rgba(255,120,0,0.7);
-    ">
+        box-shadow: 0 0 18px rgba(255,120,0,0.9);
+        transition: .25s;
+    "
+    onmouseover="this.style.transform='scale(1.08)'"
+    onmouseout="this.style.transform='scale(1)'">
         ⏭️ Pular
     </button>
 
-    <!-- 🎥 VÍDEO AGORA NO TAMANHO 80% DA TELA -->
+    <!-- BOTÃO HABILITAR SOM -->
+    <button id="soundBtn" style="
+        position: absolute;
+        bottom: 35px;
+        right: 20px;
+        padding: 18px 34px;
+        font-size: 20px;
+        font-weight: 800;
+        color: #ffffff;
+        background: linear-gradient(135deg, #ff8800, #ff4d00);
+        border: 2px solid rgba(255,255,255,0.8);
+        border-radius: 14px;
+        cursor: pointer;
+        z-index: 10000;
+        box-shadow: 0 0 20px rgba(255,120,0,0.9);
+        transition: .25s;
+    "
+    onmouseover="this.style.transform='scale(1.08)'"
+    onmouseout="this.style.transform='scale(1)'">
+        🔊 Ativar Som
+    </button>
+
+    <!-- VÍDEO -->
     <video id="introVideo" playsinline autoplay muted style="
         width: 80vw;
         height: 80vh;
-        object-fit: contain;
-background: black;
+        object-fit: cover;
         border-radius: 18px;
         box-shadow: 0 0 25px rgba(255,120,0,0.5);
     ">
@@ -80,54 +105,54 @@ background: black;
 
 <script>
 /* =================================================== */
-/*        CONTROLE DO VÍDEO — PULAR INTRO             */
+/*          CONTROLE DO VÍDEO — INTRO + SOM            */
 /* =================================================== */
 
 const introContainer = document.getElementById("introVideoContainer");
 const video = document.getElementById("introVideo");
 const skipBtn = document.getElementById("skipIntroBtn");
+const soundBtn = document.getElementById("soundBtn");
 
-/* Mostrar o vídeo quando carregado */
+/* Mostrar o vídeo quando carregar */
 video.addEventListener("loadeddata", () => {
     introContainer.style.display = "flex";
     video.play().catch(()=>{});
 });
 
-/* Botão Pular */
-skipBtn.addEventListener("click", () => {
+/* Botão de ativar som */
+soundBtn.addEventListener("click", () => {
     video.muted = false;
     video.volume = 1;
     video.play();
+    soundBtn.style.display = "none";
+});
+
+/* Botão Pular */
+skipBtn.addEventListener("click", () => {
     removerIntro();
 });
 
-/* Quando o vídeo termina, remove */
-video.addEventListener("ended", removerIntro);
-
-/* Fade-out */
+/* Fade-out e remoção */
 function removerIntro() {
     introContainer.style.opacity = "0";
     setTimeout(() => introContainer.remove(), 800);
 }
 
-/* =================================================== */
-/* 🔊 SOM AUTOMÁTICO SEM BOTÃO (TOQUE ÚNICO)          */
-/* =================================================== */
+/* Quando o vídeo termina */
+video.addEventListener("ended", removerIntro);
 
-function liberarSom() {
+/* Celular → libera som no primeiro toque */
+document.addEventListener("touchstart", () => {
     video.muted = false;
     video.volume = 1;
     video.play().catch(()=>{});
-    document.removeEventListener("touchstart", liberarSom);
-    document.removeEventListener("click", liberarSom);
-}
+}, { once: true });
 
-// PC → som já sai automaticamente
-video.muted = false;
-
-// Celular → libera som no primeiro toque
-document.addEventListener("touchstart", liberarSom, { once: true });
-document.addEventListener("click", liberarSom, { once: true });
+document.addEventListener("click", () => {
+    video.muted = false;
+    video.volume = 1;
+    video.play().catch(()=>{});
+}, { once: true });
 
 
 /* =================================================== */
@@ -246,6 +271,7 @@ async function carregarDados() {
 
     document.getElementById("mensagemExtras").innerHTML = bloco;
 }
+
 
 /* LOGOUT */
 function sair() {
