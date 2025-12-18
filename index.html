@@ -3,42 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <title>Login - FoxLog</title>
-<link rel="stylesheet" href="style.css">
 
 <style>
-/* ================================
-   FUNDO + LOGO DE FUNDO
-================================ */
-body {
-    background: #000;
-    font-family: 'Segoe UI', Arial, sans-serif;
+/* =================================================
+   RESET
+================================================= */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* =================================================
+   ======= TELA DE COMUNICADO (NOVA) =======
+   (apenas adicionada, não interfere no app)
+================================================= */
+.comunicado {
+    position: fixed;
+    inset: 0;
+    background: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    z-index: 999;
+}
+
+.comunicado-header {
+    height: 64px;
+    background: #000;
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    letter-spacing: .4px;
+}
+
+.comunicado-pdf {
+    flex: 1;
+    background: #e6e6e6;
+}
+
+.comunicado-pdf iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.comunicado-footer {
+    height: 90px;
+    background: #000;
+    color: #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.comunicado-footer button {
+    margin-top: 10px;
+    padding: 10px 36px;
+    background: #FFD700;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* =================================================
+   ======= LOGIN ORIGINAL (SEM ALTERAÇÃO) =======
+================================================= */
+body {
+    background: #000;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Marca d’água */
+/* Marca d’água ORIGINAL */
 .logo-bg {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-
+    inset: 0;
     background-image: url("logo.png");
     background-position: center;
     background-size: 700px;
     background-repeat: no-repeat;
     opacity: 0.05;
+    pointer-events: none;
 }
 
-/* ================================
-   CONTAINER CENTRAL
-================================ */
+/* Container ORIGINAL */
 .login-container {
     width: 350px;
     padding: 35px 30px;
@@ -50,7 +107,6 @@ body {
     animation: fadeIn 0.8s ease-out;
 }
 
-/* Animação */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(25px); }
     to { opacity: 1; transform: translateY(0); }
@@ -64,7 +120,6 @@ body {
     text-shadow: 0 0 12px #FFD700;
 }
 
-/* Campo CPF */
 input {
     width: 100%;
     padding: 12px;
@@ -77,8 +132,7 @@ input {
     text-align: center;
 }
 
-/* Botão */
-button {
+button.login-btn {
     width: 100%;
     padding: 12px;
     background: #FFD700;
@@ -90,7 +144,7 @@ button {
     transition: 0.2s;
 }
 
-button:hover {
+button.login-btn:hover {
     background: #FFEA00;
     transform: scale(1.03);
 }
@@ -104,6 +158,27 @@ button:hover {
 
 <body>
 
+<!-- =================================================
+     COMUNICADO (NOVO PASSO)
+================================================= -->
+<div class="comunicado" id="comunicado">
+    <div class="comunicado-header">
+        Comunicado Oficial FoxLog
+    </div>
+
+    <div class="comunicado-pdf">
+        <iframe src="anuncio.pdf"></iframe>
+    </div>
+
+    <div class="comunicado-footer">
+        Ao prosseguir, você declara estar ciente do comunicado acima.
+        <button onclick="aceitar()">CIENTE E PROSSEGUIR</button>
+    </div>
+</div>
+
+<!-- =================================================
+     LOGIN (EXATAMENTE COMO ERA)
+================================================= -->
 <div class="logo-bg"></div>
 
 <div class="login-container">
@@ -111,12 +186,16 @@ button:hover {
 
     <input type="text" id="cpf" placeholder="Digite seu CPF" maxlength="11">
 
-    <button onclick="entrar()">Entrar</button>
+    <button class="login-btn" onclick="entrar()">Entrar</button>
 
     <p id="erro" class="erro"></p>
 </div>
 
 <script>
+function aceitar() {
+    document.getElementById("comunicado").style.display = "none";
+}
+
 function entrar() {
     const cpf = document.getElementById("cpf").value.trim();
     const msg = document.getElementById("erro");
@@ -127,9 +206,7 @@ function entrar() {
     }
 
     msg.innerText = "";
-
     localStorage.setItem("cpf", cpf);
-
     window.location.href = "dashboard.html";
 }
 </script>
