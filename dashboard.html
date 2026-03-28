@@ -8,9 +8,6 @@
 
 <body>
 
-<!-- ========================================= -->
-<!--  VÍDEO DE INTRODUÇÃO (AGORA MENOR NA TELA) -->
-<!-- ========================================= -->
 <div id="introVideoContainer" style="
     position: fixed;
     top: 0; left: 0;
@@ -24,7 +21,6 @@
     transition: opacity .8s;
 ">
 
-    <!-- BOTÃO PULAR -->
     <button id="skipIntroBtn" style="
         position: absolute;
         top: 20px;
@@ -43,7 +39,6 @@
         ⏭️ Pular
     </button>
 
-    <!-- BOTÃO ATIVAR SOM -->
     <button id="ativarSomBtn" style="
         position: absolute;
         bottom: 30px;
@@ -63,26 +58,20 @@
         🔊 Ativar Som
     </button>
 
-    <!-- 🎥 VÍDEO AGORA NO TAMANHO 80% DA TELA -->
     <video id="introVideo" playsinline autoplay muted style="
         width: 80vw;
         height: 80vh;
         max-width: 80%;
         max-height: 80%;
-        object-fit: contain; /* agora não corta */
+        object-fit: contain;
         border-radius: 18px;
         box-shadow: 0 0 25px rgba(255,120,0,0.5);
-        background: black; /* evita faixas brancas */
+        background: black;
 ">
-
         <source src="videos/intro.mp4" type="video/mp4">
     </video>
 
 </div>
-
-<!-- ========================================= -->
-<!--               CONTEÚDO NORMAL             -->
-<!-- ========================================= -->
 
 <div class="logo-bg"></div>
 
@@ -102,22 +91,17 @@
 <div id="mensagemExtras" class="mensagem-bloco"></div>
 
 <script>
-/* =================================================== */
-/*        CONTROLE DO VÍDEO — PULAR INTRO             */
-/* =================================================== */
 
 const introContainer = document.getElementById("introVideoContainer");
 const video = document.getElementById("introVideo");
 const skipBtn = document.getElementById("skipIntroBtn");
 const ativarSomBtn = document.getElementById("ativarSomBtn");
 
-/* Mostrar o vídeo quando carregado */
 video.addEventListener("loadeddata", () => {
     introContainer.style.display = "flex";
     video.play().catch(()=>{});
 });
 
-/* Botão Pular */
 skipBtn.addEventListener("click", () => {
     video.muted = false;
     video.volume = 1;
@@ -125,7 +109,6 @@ skipBtn.addEventListener("click", () => {
     removerIntro();
 });
 
-/* Botão Ativar Som */
 ativarSomBtn.addEventListener("click", () => {
     video.muted = false;
     video.volume = 1;
@@ -133,18 +116,12 @@ ativarSomBtn.addEventListener("click", () => {
     ativarSomBtn.style.display = "none";
 });
 
-/* Quando o vídeo termina, remove */
 video.addEventListener("ended", removerIntro);
 
-/* Fade-out */
 function removerIntro() {
     introContainer.style.opacity = "0";
     setTimeout(() => introContainer.remove(), 800);
 }
-
-/* =================================================== */
-/* 🔊 SOM AUTOMÁTICO SEM TOQUE (CELULAR E PC)         */
-/* =================================================== */
 
 function tentarLiberarSom() {
     video.muted = false;
@@ -157,18 +134,12 @@ function tentarLiberarSom() {
     });
 }
 
-// Assim que o vídeo carregar, tenta ativar som sozinho
 video.addEventListener("loadeddata", () => {
     setTimeout(tentarLiberarSom, 300);
 });
 
-// Mostra botão caso navegador bloqueie som
 ativarSomBtn.style.display = "block";
 
-
-/* =================================================== */
-/*                SISTEMA ORIGINAL FOXLOG              */
-/* =================================================== */
 
 const API_URL =
  "https://script.google.com/macros/s/AKfycbwCK_46Is1Fj1rIDdsIclRh7s2TLYZM6gOaPc8U62COmgTNthXBX55z5wz7hkKgnAqEJA/exec";
@@ -191,11 +162,12 @@ async function carregarDados() {
     document.getElementById("mensagemTopo").innerHTML =
         `🌟 Bem-vindo à Plataforma Oficial do Entregador FoxLog!`;
 
+    // 🔥 ALTERAÇÃO AQUI (CORRIDAS → TSH)
     document.getElementById("cards").innerHTML = `
         <div class='card'>AR<br><b>${user.AR}%</b></div>
         <div class='card'>CAA<br><b>${user.CAA}%</b></div>
         <div class='card'>OVERTIME<br><b>${user.OVERTIME}%</b></div>
-        <div class='card'>Corridas Concluídas<br><b>${user.Corridas}</b></div>
+        <div class='card'>TSH<br><b>${user.TSH || 0}%</b></div>
     `;
 
     let bloco = "";
@@ -204,83 +176,30 @@ async function carregarDados() {
     if (nivel === "SUPERFOX") {
         bloco = `
             <h2>AGENDA – SUPERFOX   - Abertura da agenda: 09h00</h2>
-
-        <p><b>Parabéns por ter alcançado o SuperFOX, continue com os pontos chaves:</b></p>
-
-        <ul>
-            <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
-            <li><span class="caa">CAA (cancelamemto apos aceite) =</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME (atraso na entrega) =</span> <span class="valor">1%</span></li>
-        </ul>
-
-        <p class="aviso">
-        ⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>
-
-        <p>Nós Verificamos também:✴️Compromisso com as agendas;
-           ✴️Média de produtividade</p>
-        <p>Continue firme! 🦊🔥</p>`;
+            <p><b>Parabéns por ter alcançado o SuperFOX, continue com os pontos chaves:</b></p>
+        `;
     }
 
     if (nivel === "OURO") {
         bloco = `
          <h2>AGENDA – OURO - Abertura da agenda: 09h10</h2>
-
-        <p>Busque evoluir para SuperFox e tenha benefícios exclusivos!</p>
-
-        <ul>
-            <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
-            <li><span class="caa">CAA (cancelamemto apos aceite) =</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME (atraso na entrega) =</span> <span class="valor">1%</span></li>
-        </ul>
-
-       <p>Nós verificamos também:✴️Compromisso com as agendas;
-           ✴️Média de produtividade</p> 
-
-         <p class="aviso">
-        ⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>
         `;
     }
 
     if (nivel === "AGENDABASE") {
         bloco = `
         <h2>AGENDA – AGENDA BASE - Abertura da agenda: 09h20</h2>
-
-        <p>Busque evoluir para SuperFox e tenha benefícios exclusivos!</p>
-
-        <ul>
-            <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
-            <li><span class="caa">CAA (cancelamento após aceite) =</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME (atraso na entrega) =</span> <span class="valor">1%</span></li>
-        </ul>
-
-        <p class="aviso">
-        ⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>
-
-        <p>Nós Verificamos também: ✴️ Compromisso com as agendas; ✴️ Média de produtividade</p>
-        <p>Continue firme! 🦊🔥</p>`;
+        `;
     }
 
     document.getElementById("mensagemExtras").innerHTML = bloco;
 }
 
-/* LOGOUT */
 function sair() {
     localStorage.clear();
     window.location.href = "index.html";
 }
 
-/* AUTO LOGOUT */
 let tempoLimite = 10 * 60 * 1000;
 let timer = setTimeout(sair, tempoLimite);
 
