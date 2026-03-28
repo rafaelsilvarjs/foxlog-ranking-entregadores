@@ -2,213 +2,108 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Login - FoxLog</title>
+<title>Dashboard FoxLog</title>
 
 <style>
-/* =================================================
-   RESET
-================================================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Arial, sans-serif;
-}
-
-/* =================================================
-   ======= TELA DE COMUNICADO (NOVA) =======
-   (apenas adicionada, não interfere no app)
-================================================= */
-.comunicado {
-    position: fixed;
-    inset: 0;
-    background: #f2f2f2;
-    display: flex;
-    flex-direction: column;
-    z-index: 999;
-}
-
-.comunicado-header {
-    height: 64px;
-    background: #000;
-    color: #FFD700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    letter-spacing: .4px;
-}
-
-.comunicado-pdf {
-    flex: 1;
-    background: #e6e6e6;
-}
-
-.comunicado-pdf iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-.comunicado-footer {
-    height: 90px;
-    background: #000;
-    color: #ccc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-}
-
-.comunicado-footer button {
-    margin-top: 10px;
-    padding: 10px 36px;
-    background: #FFD700;
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-/* =================================================
-   ======= LOGIN ORIGINAL (SEM ALTERAÇÃO) =======
-================================================= */
 body {
     background: #000;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: 'Segoe UI', Arial;
+    color: #fff;
+    padding: 20px;
 }
 
-/* Marca d’água ORIGINAL */
-.logo-bg {
-    position: fixed;
-    inset: 0;
-    background-image: url("logo.png");
-    background-position: center;
-    background-size: 700px;
-    background-repeat: no-repeat;
-    opacity: 0.05;
-    pointer-events: none;
-}
-
-/* Container ORIGINAL */
-.login-container {
-    width: 350px;
-    padding: 35px 30px;
+/* CARD */
+.card {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,215,0,0.4);
-    border-radius: 18px;
-    box-shadow: 0 0 15px rgba(255,215,0,0.3);
-    text-align: center;
-    animation: fadeIn 0.8s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(25px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.login-container h2 {
-    color: #FFD700;
-    font-size: 26px;
-    font-weight: 900;
-    margin-bottom: 25px;
-    text-shadow: 0 0 12px #FFD700;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    font-size: 17px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
+    border-radius: 16px;
+    padding: 20px;
+    width: 260px;
+    box-shadow: 0 0 10px rgba(255,215,0,0.2);
     margin-bottom: 20px;
-    background: #fff;
-    text-align: center;
 }
 
-button.login-btn {
+.titulo {
+    color: #FFD700;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.valor {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* BARRA */
+.barra {
     width: 100%;
-    padding: 12px;
-    background: #FFD700;
-    border: none;
+    height: 10px;
+    background: #222;
     border-radius: 10px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button.login-btn:hover {
-    background: #FFEA00;
-    transform: scale(1.03);
-}
-
-.erro {
-    color: #FF4D4D;
     margin-top: 10px;
+    overflow: hidden;
+}
+
+.barra-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: 0.3s;
 }
 </style>
 </head>
 
 <body>
 
-<!-- =================================================
-     COMUNICADO (NOVO PASSO)
-================================================= -->
-<div class="comunicado" id="comunicado">
-    <div class="comunicado-header">
-        Comunicado Oficial FoxLog
+<h2>📊 Dashboard FoxLog</h2>
+
+<div class="card">
+    <div class="titulo">Tempo Online (%)</div>
+    <div id="tempoOnline" class="valor">0%</div>
+
+    <div class="barra">
+        <div id="barraTSH" class="barra-fill" style="width:0%; background:#FF4D4D;"></div>
     </div>
-
-    <div class="comunicado-pdf">
-        <iframe src="anuncio.pdf"></iframe>
-    </div>
-
-    <div class="comunicado-footer">
-        Ao prosseguir, você declara estar ciente do comunicado acima.
-        <button onclick="aceitar()">CIENTE E PROSSEGUIR</button>
-    </div>
-</div>
-
-<!-- =================================================
-     LOGIN (EXATAMENTE COMO ERA)
-================================================= -->
-<div class="logo-bg"></div>
-
-<div class="login-container">
-    <h2>🔒 Login - FoxLog</h2>
-
-    <input type="text" id="cpf" placeholder="Digite seu CPF" maxlength="11">
-
-    <button class="login-btn" onclick="entrar()">Entrar</button>
-
-    <p id="erro" class="erro"></p>
 </div>
 
 <script>
-function aceitar() {
-    document.getElementById("comunicado").style.display = "none";
-}
 
-function entrar() {
-    const cpf = document.getElementById("cpf").value.trim();
-    const msg = document.getElementById("erro");
+// ================================
+// 🔹 SIMULAÇÃO DE DADOS (SUBSTITUIR PELO SEU JSON)
+// ================================
+let dados = [
+    { nome: "João", TSH: 80 },
+    { nome: "Maria", TSH: 90 },
+    { nome: "Pedro", TSH: 70 }
+];
 
-    if (cpf.length !== 11 || isNaN(cpf)) {
-        msg.innerText = "CPF inválido!";
-        return;
-    }
 
-    msg.innerText = "";
-    localStorage.setItem("cpf", cpf);
-    window.location.href = "dashboard.html";
-}
+// ================================
+// 🔥 CALCULO TSH (MÉDIA)
+// ================================
+let mediaTSH = dados.reduce((soma, item) => soma + (item["TSH"] || 0), 0) / dados.length;
+
+
+// ================================
+// 🎨 DEFINIR COR DINÂMICA
+// ================================
+let cor = "#FF4D4D"; // vermelho
+
+if (mediaTSH >= 85) cor = "#22c55e"; // verde
+else if (mediaTSH >= 70) cor = "#facc15"; // amarelo
+
+
+// ================================
+// 📊 EXIBIR VALOR
+// ================================
+document.getElementById("tempoOnline").innerHTML =
+    `<span style="color:${cor};">${mediaTSH.toFixed(0)}%</span>`;
+
+// ================================
+// 📈 BARRA VISUAL
+// ================================
+document.getElementById("barraTSH").style.width = mediaTSH + "%";
+document.getElementById("barraTSH").style.background = cor;
+
 </script>
 
 </body>
