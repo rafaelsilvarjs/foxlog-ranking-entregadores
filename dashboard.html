@@ -2,253 +2,706 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Agenda FoxLog</title>
-<link rel="stylesheet" href="style.css">
-</head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoxLog - Sorteio</title>
+<style>
 
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #000;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #fff;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+.logo-bg {
+    position: fixed; inset: 0;
+    background-image: url("logo.png");
+    background-size: 900px;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.04;
+    z-index: 0;
+    pointer-events: none;
+}
+
+#fireworksCanvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 500;
+}
+
+/* ── HEADER ── */
+.top-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 66px;
+    background: rgba(0,0,0,0.92);
+    border-bottom: 1px solid rgba(255,215,0,0.25);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(8px);
+}
+.top-bar-logo { height: 36px; opacity: 0.9; filter: drop-shadow(0 0 6px rgba(255,215,0,0.5)); }
+
+.btn-sair {
+    position: fixed; top: 14px; right: 24px;
+    background: transparent; color: #FF4D4D;
+    border: 1.5px solid #FF4D4D;
+    padding: 10px 20px; border-radius: 10px;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; z-index: 300; letter-spacing: 1px; transition: 0.2s;
+}
+.btn-sair:hover { background: #FF4D4D; color: #fff; }
+
+/* ════════════════════════════════════
+   TELA: CÓDIGO (sem sorteio ainda)
+════════════════════════════════════ */
+#telaCodigos {
+    position: relative; z-index: 1;
+    padding-top: 110px; padding-bottom: 60px;
+    background: radial-gradient(ellipse at 50% 0%, #1c1400 0%, #000 65%);
+    min-height: 100vh;
+    animation: fadeUp 0.7s ease-out both;
+}
+.hero-saudacao { font-size: 13px; letter-spacing: 5px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+.hero-nome { font-size: 46px; font-weight: 900; color: #FFD700; letter-spacing: 2px; animation: pulsoNome 2.5s ease-in-out infinite; }
+.hero-cidade { margin-top: 10px; font-size: 13px; letter-spacing: 4px; color: #555; text-transform: uppercase; }
+.divider { width: 60px; height: 3px; background: linear-gradient(90deg, transparent, #FFD700, transparent); margin: 28px auto; border-radius: 2px; }
+.sorteio-titulo { font-size: 22px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: #FFD700; text-shadow: 0 0 16px rgba(255,215,0,0.5); margin-bottom: 8px; }
+.sorteio-subtitulo { font-size: 12px; letter-spacing: 3px; color: #555; text-transform: uppercase; margin-bottom: 36px; }
+.codigos-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 900px; margin: 0 auto; padding: 0 20px; }
+.codigo-badge {
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,180,0,0.04));
+    border: 2px solid #FFD700; border-radius: 18px;
+    padding: 28px 54px; font-size: 36px; font-weight: 900;
+    color: #FFD700; letter-spacing: 6px;
+    box-shadow: 0 0 35px rgba(255,215,0,0.2), inset 0 0 30px rgba(255,215,0,0.05);
+    animation: brilhoBadge 2s ease-in-out infinite alternate;
+    transition: transform 0.25s, box-shadow 0.25s; min-width: 230px;
+}
+.codigo-badge:hover { transform: scale(1.07) translateY(-4px); box-shadow: 0 0 65px rgba(255,215,0,0.6); }
+.rodape-tela { padding-top: 40px; font-size: 11px; color: #2a2a2a; letter-spacing: 3px; }
+
+/* ════════════════════════════════════
+   TELA: VENCEDOR
+════════════════════════════════════ */
+#telaVencedor {
+    display: none;
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    padding-top: 90px; padding-bottom: 60px;
+    background: radial-gradient(ellipse at 50% 20%, #2a1500 0%, #0a0500 60%, #000 100%);
+    animation: fadeUp 0.8s ease-out both;
+}
+
+.vencedor-trofeu {
+    font-size: 90px;
+    animation: troféuPulso 1s ease-in-out infinite alternate;
+    display: block;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 30px rgba(255,215,0,0.8));
+}
+
+@keyframes troféuPulso {
+    from { transform: scale(1)   rotate(-3deg); filter: drop-shadow(0 0 20px rgba(255,215,0,0.6)); }
+    to   { transform: scale(1.1) rotate(3deg);  filter: drop-shadow(0 0 50px rgba(255,215,0,1)); }
+}
+
+.vencedor-parabens {
+    font-size: 72px;
+    font-weight: 900;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #FFD700, #FF8C00, #FFD700, #FFF200, #FFD700);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradienteTexto 2s linear infinite;
+    text-shadow: none;
+    margin-bottom: 6px;
+}
+
+@keyframes gradienteTexto {
+    0%   { background-position: 0% center; }
+    100% { background-position: 300% center; }
+}
+
+.vencedor-nome {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.vencedor-numero-bloco {
+    background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,140,0,0.08));
+    border: 3px solid #FFD700;
+    border-radius: 24px;
+    padding: 34px 60px;
+    margin: 0 auto 40px;
+    display: inline-block;
+    box-shadow: 0 0 60px rgba(255,215,0,0.4), inset 0 0 40px rgba(255,215,0,0.08);
+    animation: brilhoBadge 1.2s ease-in-out infinite alternate;
+}
+
+.vencedor-label-acima {
+    font-size: 14px;
+    letter-spacing: 5px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+
+.vencedor-numero {
+    font-size: 52px;
+    font-weight: 900;
+    color: #FFD700;
+    letter-spacing: 8px;
+    text-shadow: 0 0 30px rgba(255,215,0,0.9);
+}
+
+.vencedor-label-abaixo {
+    font-size: 16px;
+    letter-spacing: 5px;
+    color: #FF8C00;
+    text-transform: uppercase;
+    margin-top: 14px;
+    font-weight: 700;
+}
+
+.vencedor-contato-bloco {
+    margin: 0 auto;
+    max-width: 500px;
+    padding: 30px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 20px;
+}
+
+.vencedor-contato-texto {
+    font-size: 18px;
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+.btn-contato {
+    padding: 16px 44px;
+    background: linear-gradient(135deg, #FFD700, #FF8C00);
+    border: none;
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #000;
+    cursor: pointer;
+    letter-spacing: 2px;
+    box-shadow: 0 0 30px rgba(255,215,0,0.5);
+    transition: 0.2s;
+    animation: btnPulso 1.5s ease-in-out infinite alternate;
+}
+.btn-contato:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(255,215,0,0.8); }
+
+@keyframes btnPulso {
+    from { box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+    to   { box-shadow: 0 0 45px rgba(255,215,0,0.9); }
+}
+
+/* ════════════════════════════════════
+   TELA: PERDEDOR
+════════════════════════════════════ */
+#telaPerdedor {
+    display: none;
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    padding-top: 100px; padding-bottom: 60px;
+    background: radial-gradient(ellipse at 50% 0%, #0a0a1a 0%, #000 70%);
+    animation: fadeUp 0.8s ease-out both;
+}
+
+.perdedor-icone {
+    font-size: 70px;
+    display: block;
+    margin-bottom: 14px;
+    animation: flutuarIcone 3s ease-in-out infinite;
+}
+
+@keyframes flutuarIcone {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-12px); }
+}
+
+.perdedor-titulo {
+    font-size: 38px;
+    font-weight: 900;
+    color: #8899CC;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+}
+
+.perdedor-subtitulo {
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: #444;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.perdedor-nome {
+    font-size: 26px;
+    font-weight: 700;
+    color: #aaa;
+    letter-spacing: 2px;
+    margin-bottom: 36px;
+}
+
+.sorteado-bloco {
+    margin: 0 auto 36px;
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(100,120,255,0.1), rgba(80,80,200,0.05));
+    border: 2px solid rgba(150,170,255,0.4);
+    border-radius: 20px;
+    padding: 28px 56px;
+    box-shadow: 0 0 40px rgba(100,120,255,0.15);
+}
+
+.sorteado-label {
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: #556;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.sorteado-numero {
+    font-size: 48px;
+    font-weight: 900;
+    color: #7788FF;
+    letter-spacing: 6px;
+    text-shadow: 0 0 20px rgba(100,120,255,0.6);
+    animation: brilhoAzul 2s ease-in-out infinite alternate;
+}
+
+@keyframes brilhoAzul {
+    from { text-shadow: 0 0 15px rgba(100,120,255,0.4); }
+    to   { text-shadow: 0 0 40px rgba(100,120,255,0.9), 0 0 70px rgba(100,120,255,0.3); }
+}
+
+.seus-numeros-bloco {
+    margin: 0 auto 34px;
+    max-width: 700px;
+    padding: 0 20px;
+}
+
+.seus-numeros-label {
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: #444;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.seus-numeros-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+
+.numero-pequeno {
+    border: 1.5px solid #333;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #555;
+    letter-spacing: 3px;
+}
+
+.mensagem-encorajamento {
+    font-size: 20px;
+    color: #5566AA;
+    letter-spacing: 2px;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.estrelas-perdedor {
+    font-size: 28px;
+    display: block;
+    margin-top: 14px;
+    animation: piscaEstrelas 1.5s ease-in-out infinite;
+}
+
+@keyframes piscaEstrelas {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+}
+
+/* ════════ ANIMAÇÕES COMUNS ════════ */
+@keyframes pulsoNome {
+    0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.7), 0 0 50px rgba(255,215,0,0.3); }
+    50%       { text-shadow: 0 0 40px rgba(255,215,0,1),   0 0 80px rgba(255,215,0,0.5); }
+}
+@keyframes brilhoBadge {
+    from { box-shadow: 0 0 20px rgba(255,215,0,0.15); }
+    to   { box-shadow: 0 0 50px rgba(255,215,0,0.5), 0 0 100px rgba(255,215,0,0.15); }
+}
+@keyframes revelarBadge {
+    0%   { opacity: 0; transform: scale(0.5) rotate(-5deg); }
+    70%  { opacity: 1; transform: scale(1.08) rotate(1deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+</head>
 <body>
 
+<!-- VÍDEO INTRO -->
 <div id="introVideoContainer" style="
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.85);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 1;
-    transition: opacity .8s;
-">
-
-    <button id="skipIntroBtn" style="
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        padding: 14px 26px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #ffffff;
-        background: linear-gradient(135deg, #ff8800, #ff4d00);
-        border: 2px solid rgba(255,255,255,0.7);
-        border-radius: 10px;
-        cursor: pointer;
-        z-index: 10000;
-        box-shadow: 0 0 12px rgba(255,120,0,0.7);
-    ">
+    position:fixed;top:0;left:0;width:100vw;height:100vh;
+    background:rgba(0,0,0,0.9);display:none;justify-content:center;
+    align-items:center;z-index:9999;opacity:1;transition:opacity .8s;">
+    <button id="skipIntroBtn" style="position:absolute;top:20px;right:20px;padding:14px 26px;
+        font-size:18px;font-weight:600;color:#fff;background:linear-gradient(135deg,#ff8800,#ff4d00);
+        border:2px solid rgba(255,255,255,0.7);border-radius:10px;cursor:pointer;z-index:10000;">
         ⏭️ Pular
     </button>
-
-    <button id="ativarSomBtn" style="
-        position: absolute;
-        bottom: 30px;
-        right: 20px;
-        padding: 14px 26px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #ffffff;
-        background: linear-gradient(135deg, #ffaa00, #ff6600);
-        border: 2px solid rgba(255,255,255,0.7);
-        border-radius: 10px;
-        cursor: pointer;
-        z-index: 10000;
-        display: none;
-        box-shadow: 0 0 12px rgba(255,120,0,0.7);
-    ">
-        🔊 Ativar Som
-    </button>
-
-    <video id="introVideo" playsinline autoplay muted style="
-        width: 80vw;
-        height: 80vh;
-        max-width: 80%;
-        max-height: 80%;
-        object-fit: contain;
-        border-radius: 18px;
-        box-shadow: 0 0 25px rgba(255,120,0,0.5);
-        background: black;
-">
+    <video id="introVideo" playsinline autoplay muted style="width:80vw;height:80vh;
+        max-width:80%;max-height:80%;object-fit:contain;border-radius:18px;background:#000;">
         <source src="videos/intro.mp4" type="video/mp4">
     </video>
-
 </div>
 
+<canvas id="fireworksCanvas"></canvas>
 <div class="logo-bg"></div>
 
+<div class="top-bar"><img src="logo.png" class="top-bar-logo" alt="FoxLog"></div>
 <button class="btn-sair" onclick="sair()">🔓 Sair</button>
 
-<h1 id="mensagemTopo" class="titulo-superior"></h1>
-
-<div class="box-nivel-topo">
-    <p style="font-size:22px;">Agenda Atual:</p>
-    <h2 id="nivelAtual"></h2>
+<!-- ══ TELA 1: CÓDIGOS ══ -->
+<div id="telaCodigos" style="display:none">
+    <p class="hero-saudacao">Bem-vindo ao Sorteio FoxLog</p>
+    <h1 class="hero-nome" id="nomeEntregador1"></h1>
+    <p class="hero-cidade" id="cidadeEntregador1"></p>
+    <div class="divider"></div>
+    <p class="sorteio-titulo">🎉 Seus Números do Sorteio 🎉</p>
+    <p class="sorteio-subtitulo">Guarde bem — boa sorte!</p>
+    <div class="codigos-grid" id="codigosContainer"></div>
+    <p class="rodape-tela">FOXLOG &nbsp;•&nbsp; SORTEIO OFICIAL</p>
 </div>
 
-<h3 id="nomeEntregador"></h3>
+<!-- ══ TELA 2: VENCEDOR ══ -->
+<div id="telaVencedor">
+    <span class="vencedor-trofeu">🏆</span>
+    <h1 class="vencedor-parabens">PARABÉNS!</h1>
+    <h2 class="vencedor-nome" id="nomeVencedor"></h2>
 
-<div id="cards"></div>
+    <div class="vencedor-numero-bloco">
+        <p class="vencedor-label-acima">Seu número</p>
+        <div class="vencedor-numero" id="numeroVencedor"></div>
+        <p class="vencedor-label-abaixo">✨ Foi o SORTEADO! ✨</p>
+    </div>
 
-<div id="mensagemExtras" class="mensagem-bloco"></div>
+    <div class="vencedor-contato-bloco">
+        <p class="vencedor-contato-texto">
+            Você é o grande vencedor!<br>
+            Entre em contato com a <strong>FoxLog</strong> para resgatar seu prêmio. 🎁
+        </p>
+        <button class="btn-contato" onclick="entrarContato()">📲 Entrar em Contato</button>
+    </div>
+</div>
+
+<!-- ══ TELA 3: PERDEDOR ══ -->
+<div id="telaPerdedor">
+    <span class="perdedor-icone">🍀</span>
+    <h2 class="perdedor-titulo">Não foi dessa vez...</h2>
+    <p class="perdedor-subtitulo">mas continue participando!</p>
+    <p class="perdedor-nome" id="nomePerdedor"></p>
+
+    <div class="sorteado-bloco">
+        <p class="sorteado-label">🎯 O número sorteado foi</p>
+        <div class="sorteado-numero" id="numeroSorteado"></div>
+    </div>
+
+    <div class="seus-numeros-bloco">
+        <p class="seus-numeros-label">Seus números eram</p>
+        <div class="seus-numeros-grid" id="seuNumerosLista"></div>
+    </div>
+
+    <p class="mensagem-encorajamento">
+        Boa sorte na próxima rodada!<br>Quem sabe é você o próximo! 🚀
+    </p>
+    <span class="estrelas-perdedor">⭐ ⭐ ⭐</span>
+</div>
 
 <script>
 
-/* ================= VÍDEO ================= */
+/* ── VÍDEO ── */
 const introContainer = document.getElementById("introVideoContainer");
-const video = document.getElementById("introVideo");
-const skipBtn = document.getElementById("skipIntroBtn");
-const ativarSomBtn = document.getElementById("ativarSomBtn");
+const video          = document.getElementById("introVideo");
+const skipBtn        = document.getElementById("skipIntroBtn");
 
-video.addEventListener("loadeddata", () => {
-    introContainer.style.display = "flex";
-    video.play().catch(()=>{});
-});
-
-skipBtn.addEventListener("click", () => {
-    video.muted = false;
-    video.volume = 1;
-    video.play();
-    removerIntro();
-});
-
-ativarSomBtn.addEventListener("click", () => {
-    video.muted = false;
-    video.volume = 1;
-    video.play().catch(()=>{});
-    ativarSomBtn.style.display = "none";
-});
-
+video.addEventListener("loadeddata", () => { introContainer.style.display = "flex"; video.play().catch(()=>{}); });
+skipBtn.addEventListener("click",    () => { video.muted = false; video.volume = 1; video.play(); removerIntro(); });
 video.addEventListener("ended", removerIntro);
+function removerIntro() { introContainer.style.opacity = "0"; setTimeout(() => introContainer.remove(), 800); }
 
-function removerIntro() {
-    introContainer.style.opacity = "0";
-    setTimeout(() => introContainer.remove(), 800);
+/* ── FOGOS ── */
+function startFireworks(intenso) {
+    const canvas = document.getElementById("fireworksCanvas");
+    const ctx    = canvas.getContext("2d");
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener("resize", resize);
+
+    const CORES_NORMAL = ["#FFD700","#FFA500","#FF4500","#FF69B4","#00CED1","#7CFC00","#fff","#FF6347","#AA44FF"];
+    const CORES_EPICO  = ["#FFD700","#FF8C00","#FFD700","#FFF200","#FF4500","#FF69B4","#fff","#00CED1","#FF6347","#AA44FF","#FFD700"];
+    const CORES = intenso ? CORES_EPICO : CORES_NORMAL;
+
+    const particles = [];
+    const rockets   = [];
+
+    class Rocket {
+        constructor() {
+            this.x       = Math.random() * canvas.width  * 0.85 + canvas.width  * 0.075;
+            this.y       = canvas.height + 10;
+            this.vy      = -(Math.random() * (intenso ? 9 : 7) + 8);
+            this.vx      = (Math.random() - 0.5) * 3;
+            this.targetY = Math.random() * canvas.height * (intenso ? 0.55 : 0.45) + canvas.height * 0.05;
+            this.cor     = CORES[Math.floor(Math.random() * CORES.length)];
+            this.trail   = [];
+        }
+        update() {
+            this.trail.push({ x: this.x, y: this.y, a: 1 });
+            if (this.trail.length > 14) this.trail.shift();
+            this.trail.forEach(t => t.a -= 0.07);
+            this.x += this.vx; this.y += this.vy; this.vy += 0.18;
+            if (this.y <= this.targetY || this.vy >= 0) { this._explodir(); return true; }
+            return false;
+        }
+        _explodir() {
+            const count = Math.floor(Math.random() * (intenso ? 110 : 90)) + (intenso ? 100 : 80);
+            for (let i = 0; i < count; i++) {
+                const ang = (Math.PI * 2 / count) * i + Math.random() * 0.3;
+                const spd = Math.random() * 6 + 2;
+                particles.push({ x: this.x, y: this.y, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd,
+                    cor: this.cor, alpha: 1, decay: Math.random()*0.015+0.007, r: Math.random()*3+1, g: 0.09 });
+            }
+        }
+        draw() {
+            this.trail.forEach((t, i) => {
+                if (t.a <= 0) return;
+                ctx.save(); ctx.globalAlpha = t.a; ctx.fillStyle = this.cor;
+                ctx.beginPath(); ctx.arc(t.x, t.y, (i/this.trail.length)*3, 0, Math.PI*2); ctx.fill(); ctx.restore();
+            });
+            ctx.save(); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(this.x, this.y, 2.5, 0, Math.PI*2); ctx.fill(); ctx.restore();
+        }
+    }
+
+    const duracao    = intenso ? 99999 : 3000;
+    const intervalo  = intenso ? 600   : 600;
+    const totalLanc  = intenso ? 999   : 8;
+    let lancados = 0;
+
+    function lancar() {
+        rockets.push(new Rocket());
+        lancados++;
+        if (lancados < totalLanc) setTimeout(lancar, intervalo - Math.random() * 200);
+    }
+    lancar();
+    setTimeout(lancar, 300);
+    setTimeout(lancar, 700);
+
+    const inicio = Date.now();
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = rockets.length-1; i >= 0; i--) {
+            rockets[i].draw();
+            if (rockets[i].update()) rockets.splice(i, 1);
+        }
+        for (let i = particles.length-1; i >= 0; i--) {
+            const p = particles[i];
+            p.vx *= 0.98; p.vy *= 0.98; p.vy += p.g;
+            p.x += p.vx; p.y += p.vy; p.alpha -= p.decay;
+            if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+            ctx.save(); ctx.globalAlpha = p.alpha; ctx.fillStyle = p.cor;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); ctx.restore();
+        }
+
+        const elapsed = Date.now() - inicio;
+        if (elapsed < duracao || rockets.length > 0 || particles.length > 0) {
+            requestAnimationFrame(animate);
+        } else {
+            canvas.style.transition = "opacity 1.5s"; canvas.style.opacity = "0";
+            setTimeout(() => { ctx.clearRect(0,0,canvas.width,canvas.height); canvas.style.opacity = "1"; }, 1500);
+        }
+    }
+    animate();
 }
 
-/* ================= API ================= */
+/* ── PARTÍCULAS SUAVES (perdedor) ── */
+function startParticlesSuaves() {
+    const canvas = document.getElementById("fireworksCanvas");
+    const ctx    = canvas.getContext("2d");
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+
+    const stars = Array.from({ length: 60 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height + canvas.height,
+        vy: -(Math.random() * 0.8 + 0.3),
+        vx: (Math.random() - 0.5) * 0.4,
+        alpha: Math.random() * 0.5 + 0.2,
+        r: Math.random() * 2 + 1,
+        cor: ["#5566AA","#7788CC","#4455BB","#aabbff","#8899DD"][Math.floor(Math.random()*5)]
+    }));
+
+    const inicio = Date.now();
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+            s.x += s.vx; s.y += s.vy;
+            if (s.y < -10) { s.y = canvas.height + 10; s.x = Math.random() * canvas.width; }
+            ctx.save(); ctx.globalAlpha = s.alpha; ctx.fillStyle = s.cor;
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill(); ctx.restore();
+        });
+        if (Date.now() - inicio < 8000) requestAnimationFrame(animate);
+        else { canvas.style.transition = "opacity 2s"; canvas.style.opacity = "0"; setTimeout(() => { ctx.clearRect(0,0,canvas.width,canvas.height); canvas.style.opacity="1"; }, 2000); }
+    }
+    animate();
+}
+
+/* ── API ── */
 const API_URL =
- "https://script.google.com/macros/s/AKfycbwCK_46Is1Fj1rIDdsIclRh7s2TLYZM6gOaPc8U62COmgTNthXBX55z5wz7hkKgnAqEJA/exec";
+    "https://script.google.com/macros/s/AKfycbwCK_46Is1Fj1rIDdsIclRh7s2TLYZM6gOaPc8U62COmgTNthXBX55z5wz7hkKgnAqEJA/exec";
 
 async function carregarDados() {
     const cpf = localStorage.getItem("cpf");
-    if (!cpf) window.location.href = "index.html";
+    if (!cpf) { window.location.href = "index.html"; return; }
 
     const response = await fetch(`${API_URL}?cpf=${cpf}`);
-    const user = await response.json();
+    const user     = await response.json();
 
     if (user.error) {
-        document.body.innerHTML = `<h1>CPF não encontrado!</h1>`;
+        document.body.innerHTML = `
+            <div style="color:#fff;text-align:center;margin-top:20vh;font-size:22px;">
+                CPF não encontrado!<br><br>
+                <button onclick="window.location.href='index.html'"
+                    style="margin-top:20px;padding:14px 36px;font-size:18px;border-radius:12px;
+                    border:2px solid #FFD700;background:transparent;color:#FFD700;cursor:pointer;">
+                    Voltar ao Login
+                </button>
+            </div>`;
         return;
     }
 
-    document.getElementById("nomeEntregador").innerText = "👋 Olá, " + user.Nome;
-    document.getElementById("nivelAtual").innerText = user.Nivel;
+    const codigosRaw = String(user.CODIGO   || "").trim();
+    const ganhador   = String(user.Ganhador || user.GANHADOR || user.ganhador || "").trim();
+    const lista      = codigosRaw.split(",").map(c => c.trim()).filter(c => c);
 
-    document.getElementById("mensagemTopo").innerHTML =
-        `🌟 Bem-vindo à Plataforma Oficial do Entregador FoxLog!`;
+    /* ── Verifica se ganhou ── */
+    const ganhou = ganhador !== "" && lista.some(c => c === ganhador);
 
-    // ✅ ÚNICA ALTERAÇÃO AQUI
-    document.getElementById("cards").innerHTML = `
-        <div class='card'>AR<br><b>${user.AR}%</b></div>
-        <div class='card'>CAA<br><b>${user.CAA}%</b></div>
-        <div class='card'>OVERTIME<br><b>${user.OVERTIME}%</b></div>
-        <div class='card'>Tempo Online<br><b>${user.TSH || 0}%</b></div>
-    `;
-
-    let bloco = "";
-    const nivel = user.Nivel.toUpperCase().replace(/\s+/g, "");
-
-    if (nivel === "SUPERFOX") {
-        bloco = `
-            <h2>AGENDA – SUPERFOX   - Abertura da agenda: 09h00</h2>
-
-        <p><b>Parabéns por ter alcançado o SuperFOX, continue com os pontos chaves:</b></p>
-
-        <ul>
-            <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
-            <li><span class="caa">CAA (cancelamemto apos aceite) =</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME (atraso na entrega) =</span> <span class="valor">1%</span></li>
-        </ul>
-
-        <p class="aviso">
-        ⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>
-
-        <p>Nós Verificamos também:✴️Compromisso com as agendas;
-           ✴️Média de produtividade</p>
-        <p>Continue firme! 🦊🔥</p>`;
+    if (ganhador === "") {
+        /* Sorteio ainda não realizado — mostra os números */
+        mostrarCodigos(user, lista);
+    } else if (ganhou) {
+        mostrarVencedor(user, ganhador);
+    } else {
+        mostrarPerdedor(user, lista, ganhador);
     }
-
-    if (nivel === "OURO") {
-        bloco = `
-         <h2>AGENDA – OURO - Abertura da agenda: 09h10</h2>
-
-        <p>Busque evoluir para SuperFox e tenha benefícios exclusivos!</p>
-
-        <ul>
-            <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
-            <li><span class="caa">CAA (cancelamemto apos aceite) =</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME (atraso na entrega) =</span> <span class="valor">1%</span></li>
-        </ul>
-
-       <p>Nós verificamos também:✴️Compromisso com as agendas;
-           ✴️Média de produtividade</p> 
-
-         <p class="aviso">
-        ⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>
-        `;
-    }
-
-    if (nivel === "AGENDABASE") {
-        bloco = `
-        <h2>AGENDA – AGENDA BASE - Abertura da agenda: 09h20</h2>
-
-        <p>Busque evoluir para SuperFox e tenha benefícios exclusivos!</p>
-
-        <ul>
-            <li><span class="ar">AR (rotas aceitas) =</span> MAIOR OU IGUAL A <span class="valor">95%</span></li>
-            <li><span class="caa">CAA (cancelamento após aceite) =</span> MENOR OU IGUAL A <span class="valor">1%</span></li>
-            <li><span class="overtime">OVERTIME (atraso na entrega) =</span> <span class="valor">1%</span></li>
-        </ul>
-
-        <p class="aviso">
-        ⚠️ LEMBRANDO QUE<br>
-        Essa avaliação serve apenas para manter sua prioridade na agenda.<br>
-        Não é cobrança — são orientações para melhorar seu desempenho.<br>
-        Você é prestador de serviço e tem autonomia total.
-        </p>
-
-        <p>Nós Verificamos também: ✴️ Compromisso com as agendas; ✴️ Média de produtividade</p>
-        <p>Continue firme! 🦊🔥</p>`;
-    }
-
-    document.getElementById("mensagemExtras").innerHTML = bloco;
 }
 
-function sair() {
-    localStorage.clear();
-    window.location.href = "index.html";
+function esconderTelas() {
+    document.getElementById("telaCodigos").style.display  = "none";
+    document.getElementById("telaVencedor").style.display = "none";
+    document.getElementById("telaPerdedor").style.display = "none";
 }
 
-let tempoLimite = 10 * 60 * 1000;
-let timer = setTimeout(sair, tempoLimite);
+function mostrarCodigos(user, lista) {
+    esconderTelas();
+    document.getElementById("telaCodigos").style.display = "block";
+    document.getElementById("nomeEntregador1").innerText = user.Entregador;
+    document.getElementById("cidadeEntregador1").innerText = "📍 " + user.Cidade;
 
-function resetTimer() {
-    clearTimeout(timer);
-    timer = setTimeout(sair, tempoLimite);
+    // Fogos PRIMEIRO
+    startFireworks(false);
+
+    // Números aparecem depois (3s)
+    setTimeout(() => {
+        const container = document.getElementById("codigosContainer");
+        if (lista.length === 0) {
+            container.innerHTML = `<p style="color:#444;font-size:18px;padding:40px;">Nenhum número disponível no momento.</p>`;
+        } else {
+            container.innerHTML = lista.map((c, i) => `
+                <div class="codigo-badge" style="animation: revelarBadge 0.6s ease-out ${i*0.25}s both, brilhoBadge 2s ease-in-out ${i*0.25+0.6}s infinite alternate;">
+                    ${c}
+                </div>`).join("");
+        }
+    }, 3000);
 }
 
+function mostrarVencedor(user, numero) {
+    esconderTelas();
+    const tela = document.getElementById("telaVencedor");
+    tela.style.display = "block";
+    tela.style.opacity = "0";
+    document.getElementById("nomeVencedor").innerText   = user.Entregador;
+    document.getElementById("numeroVencedor").innerText = numero;
+
+    // Fogos PRIMEIRO
+    startFireworks(true);
+
+    // Conteúdo aparece depois (3s)
+    setTimeout(() => {
+        tela.style.transition = "opacity 1.2s ease";
+        tela.style.opacity    = "1";
+    }, 3000);
+}
+
+function mostrarPerdedor(user, lista, ganhador) {
+    esconderTelas();
+    const tela = document.getElementById("telaPerdedor");
+    tela.style.display = "block";
+    tela.style.opacity = "0";
+    document.getElementById("nomePerdedor").innerText   = "👋 " + user.Entregador;
+    document.getElementById("numeroSorteado").innerText = ganhador;
+    const grid = document.getElementById("seuNumerosLista");
+    grid.innerHTML = lista.map(c => `<div class="numero-pequeno">${c}</div>`).join("");
+
+    // Partículas PRIMEIRO
+    startParticlesSuaves();
+
+    // Conteúdo aparece depois (2.5s)
+    setTimeout(() => {
+        tela.style.transition = "opacity 1.2s ease";
+        tela.style.opacity    = "1";
+    }, 2500);
+}
+
+function entrarContato() {
+    alert("Entre em contato com a equipe FoxLog para resgatar seu prêmio! 🎉");
+}
+
+/* ── SESSÃO ── */
+function sair() { localStorage.clear(); window.location.href = "index.html"; }
+let timer = setTimeout(sair, 10 * 60 * 1000);
+function resetTimer() { clearTimeout(timer); timer = setTimeout(sair, 10 * 60 * 1000); }
 window.addEventListener("mousemove", resetTimer);
-window.addEventListener("keydown", resetTimer);
-window.addEventListener("click", resetTimer);
+window.addEventListener("keydown",   resetTimer);
+window.addEventListener("click",     resetTimer);
 
 carregarDados();
-</script>
 
+</script>
 </body>
 </html>

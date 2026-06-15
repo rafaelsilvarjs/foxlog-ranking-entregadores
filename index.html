@@ -16,64 +16,7 @@
 }
 
 /* =================================================
-   ======= TELA DE COMUNICADO (NOVA) =======
-   (apenas adicionada, não interfere no app)
-================================================= */
-.comunicado {
-    position: fixed;
-    inset: 0;
-    background: #f2f2f2;
-    display: flex;
-    flex-direction: column;
-    z-index: 999;
-}
-
-.comunicado-header {
-    height: 64px;
-    background: #000;
-    color: #FFD700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    letter-spacing: .4px;
-}
-
-.comunicado-pdf {
-    flex: 1;
-    background: #e6e6e6;
-}
-
-.comunicado-pdf iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-.comunicado-footer {
-    height: 90px;
-    background: #000;
-    color: #ccc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-}
-
-.comunicado-footer button {
-    margin-top: 10px;
-    padding: 10px 36px;
-    background: #FFD700;
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-/* =================================================
-   ======= LOGIN ORIGINAL (SEM ALTERAÇÃO) =======
+   LOGIN
 ================================================= */
 body {
     background: #000;
@@ -91,7 +34,7 @@ body {
     background-position: center;
     background-size: 700px;
     background-repeat: no-repeat;
-    opacity: 0.05;
+    opacity: 0.18;
     pointer-events: none;
 }
 
@@ -159,25 +102,7 @@ button.login-btn:hover {
 <body>
 
 <!-- =================================================
-     COMUNICADO (NOVO PASSO)
-================================================= -->
-<div class="comunicado" id="comunicado">
-    <div class="comunicado-header">
-        Comunicado Oficial FoxLog
-    </div>
-
-    <div class="comunicado-pdf">
-        <iframe src="anuncio.pdf"></iframe>
-    </div>
-
-    <div class="comunicado-footer">
-        Ao prosseguir, você declara estar ciente do comunicado acima.
-        <button onclick="aceitar()">CIENTE E PROSSEGUIR</button>
-    </div>
-</div>
-
-<!-- =================================================
-     LOGIN (EXATAMENTE COMO ERA)
+     LOGIN
 ================================================= -->
 <div class="logo-bg"></div>
 
@@ -192,10 +117,6 @@ button.login-btn:hover {
 </div>
 
 <script>
-function aceitar() {
-    document.getElementById("comunicado").style.display = "none";
-}
-
 function entrar() {
     const cpf = document.getElementById("cpf").value.trim();
     const msg = document.getElementById("erro");
