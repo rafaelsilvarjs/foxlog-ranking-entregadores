@@ -83,6 +83,9 @@ body {
     transition: transform 0.25s, box-shadow 0.25s; min-width: 230px;
 }
 .codigo-badge:hover { transform: scale(1.07) translateY(-4px); box-shadow: 0 0 65px rgba(255,215,0,0.6); }
+.codigo-badge { flex-direction: column; gap: 6px; }
+.badge-valor { font-size: 44px; line-height: 1; letter-spacing: 4px; }
+.badge-label { font-size: 12px; font-weight: 700; letter-spacing: 5px; color: #8a7320; }
 
 /* ════════════════════════════════════
    TELA: VENCEDOR
@@ -598,20 +601,44 @@ async function carregarDados() {
         return;
     }
 
-    const codigosRaw = String(user.CODIGO   || "").trim();
-    const ganhador   = String(user.Ganhador || user.GANHADOR || user.ganhador || "").trim();
-    const lista      = codigosRaw.split(",").map(c => c.trim()).filter(c => c);
+    /* Leitura da planilha, tolerante a caixa/espaço no cabeçalho. */
+    const campo = alvo => {
+        const k = Object.keys(user).find(
+            k => k.trim().toLowerCase().replace(/\s+/g, "") === alvo
+        );
+        return k === undefined ? "" : user[k];
+    };
 
-    /* ── Verifica se ganhou ── */
-    const ganhou = ganhador !== "" && lista.some(c => c === ganhador);
+    /* Separa em itens; aceita valor único ou lista por vírgula.
+       String() direto, sem ||, porque o valor 0 é válido. */
+    const itens = v => String(v === undefined || v === null ? "" : v)
+        .split(",").map(t => t.trim()).filter(t => t !== "");
 
-    if (ganhador === "") {
-        /* Sorteio ainda não realizado — mostra os números */
-        mostrarCodigos(user, lista);
-    } else if (ganhou) {
-        mostrarVencedor(user, ganhador);
+    /* PONTOS (ex.: "26 PONTOS", "52", "0 PONTOS") — só os dígitos */
+    const soNumero = t => (String(t).match(/-?\d+/) || [""])[0];
+    const pontos   = itens(campo("pontos")).map(soNumero).filter(t => t !== "");
+
+    /* O sorteio marca APENAS a linha do vencedor: CODIGO e/ou Ganhador
+       ficam preenchidos só para ele. As demais linhas seguem vazias. */
+    const codigos  = itens(campo("codigo"));
+    const ganhador = String(campo("ganhador")).trim();
+
+    /* Resultado global do sorteio — só existe se a API passar a devolver
+       um campo comum a todas as linhas. Sem ele, os demais não têm como
+       saber que o sorteio ocorreu e continuam vendo os pontos. */
+    const sorteado = String(
+        campo("numerosorteado") || campo("sorteado") || campo("resultado") || ""
+    ).trim();
+
+    if (codigos.length || ganhador !== "") {
+        /* Esta linha é a do vencedor */
+        mostrarVencedor(user, codigos[0] || ganhador);
+    } else if (sorteado !== "") {
+        /* Sorteio realizado e esta linha não ganhou */
+        mostrarPerdedor(user, pontos, sorteado);
     } else {
-        mostrarPerdedor(user, lista, ganhador);
+        /* Sorteio ainda não realizado — mostra apenas os pontos */
+        mostrarPontos(user, pontos);
     }
 }
 
@@ -621,7 +648,7 @@ function esconderTelas() {
     document.getElementById("telaPerdedor").style.display = "none";
 }
 
-function mostrarCodigos(user, lista) {
+function mostrarPontos(user, lista) {
     esconderTelas();
     document.getElementById("telaCodigos").style.display = "block";
     document.getElementById("nomeEntregador1").innerText = user.Entregador;
@@ -634,11 +661,12 @@ function mostrarCodigos(user, lista) {
     setTimeout(() => {
         const container = document.getElementById("codigosContainer");
         if (lista.length === 0) {
-            container.innerHTML = `<p style="color:#444;font-size:18px;padding:40px;">Nenhum número disponível no momento.</p>`;
+            container.innerHTML = `<p style="color:#444;font-size:18px;padding:40px;">Nenhum ponto registrado no momento.</p>`;
         } else {
             container.innerHTML = lista.map((c, i) => `
                 <div class="codigo-badge" style="animation: revelarBadge 0.6s ease-out ${i*0.25}s both, brilhoBadge 2s ease-in-out ${i*0.25+0.6}s infinite alternate;">
-                    ${c}
+                    <span class="badge-valor">${c}</span>
+                    <span class="badge-label">${c === "1" ? "PONTO" : "PONTOS"}</span>
                 </div>`).join("");
         }
     }, 3000);
