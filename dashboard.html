@@ -614,9 +614,28 @@ async function carregarDados() {
     const itens = v => String(v === undefined || v === null ? "" : v)
         .split(",").map(t => t.trim()).filter(t => t !== "");
 
-    /* PONTOS (ex.: "26 PONTOS", "52", "0 PONTOS") — só os dígitos */
+    /* PONTOS (ex.: "26 PONTOS", "52", "0 PONTOS") — só os dígitos.
+       Na planilha atual a coluna dos pontos está com o cabeçalho VAZIO e
+       existe outra chamada "PONTOS" sem valores, então campo("pontos")
+       volta vazio. Nesse caso procura na linha o valor tipo "45 PONTOS". */
     const soNumero = t => (String(t).match(/-?\d+/) || [""])[0];
-    const pontos   = itens(campo("pontos")).map(soNumero).filter(t => t !== "");
+
+    const brutoPontos = (() => {
+        const direto = String(campo("pontos")).trim();
+        if (direto !== "") return direto;
+        const achado = Object.entries(user).find(([k, v]) =>
+            !/^(cidade|entregador|cpf|ganhador)$/.test(k.trim().toLowerCase()) &&
+            /\d/.test(String(v)) && /ponto/i.test(String(v))
+        );
+        return achado ? achado[1] : "";
+    })();
+
+    const pontos = itens(brutoPontos).map(soNumero).filter(t => t !== "");
+
+    /* Os cabeçalhos da planilha são MAIÚSCULOS (ENTREGADOR, CIDADE) e as
+       telas leem user.Entregador/user.Cidade — normaliza aqui. */
+    user.Entregador = campo("entregador");
+    user.Cidade     = campo("cidade");
 
     /* O sorteio marca APENAS a linha do vencedor: CODIGO e/ou Ganhador
        ficam preenchidos só para ele. As demais linhas seguem vazias. */
@@ -654,10 +673,14 @@ function mostrarPontos(user, lista) {
     document.getElementById("nomeEntregador1").innerText = user.Entregador;
     document.getElementById("cidadeEntregador1").innerText = "📍 " + user.Cidade;
 
-    // Fogos PRIMEIRO
-    startFireworks(false);
+    /* Fogos só para quem realmente tem ponto: lista vazia ou tudo zero
+       (a planilha manda "0 PONTOS") não ganha comemoracao. */
+    const temPontos = lista.some(c => Number(c) > 0);
 
-    // Números aparecem depois (3s)
+    // Fogos PRIMEIRO
+    if (temPontos) startFireworks(false);
+
+    // Com fogos, os números aparecem depois (3s); sem fogos, direto.
     setTimeout(() => {
         const container = document.getElementById("codigosContainer");
         if (lista.length === 0) {
@@ -669,7 +692,7 @@ function mostrarPontos(user, lista) {
                     <span class="badge-label">${c === "1" ? "PONTO" : "PONTOS"}</span>
                 </div>`).join("");
         }
-    }, 3000);
+    }, temPontos ? 3000 : 0);
 }
 
 function mostrarVencedor(user, numero) {
